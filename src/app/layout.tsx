@@ -3,6 +3,7 @@ import { Josefin_Sans, Playfair } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { Toaster } from "@/components/ui/toast";
 
 const josefinSans = Josefin_Sans({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main> 
         <Footer /> 
+        <Toaster />
       </body>
     </html>
   );

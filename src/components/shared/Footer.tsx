@@ -1,5 +1,8 @@
+import React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
+import Logo from "@/assets/booknook.png";
 
 const Footer = () => {
   return (
@@ -7,16 +10,29 @@ const Footer = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main 4-Column Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-border">
-          {/* Column 1: Brand, Tagline, Description & Social Links */}
+          {/* Column 1: Brand Logo, Tagline, Description & Social Links */}
           <div className="lg:col-span-4 space-y-3 text-center sm:text-left">
-            <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold font-josefin text-primary leading-none">
-                BookNook
-              </span>
-              <span className="block text-[10px] font-semibold text-secondary tracking-widest uppercase mt-1">
-                A World Between Pages
-              </span>
-            </Link>
+            {/* Logo Image beside Logo Text */}
+            <div className="flex items-center justify-center sm:justify-start">
+              <Link href="/" className="inline-flex items-center space-x-3">
+                <Image
+                  src={Logo}
+                  width={40}
+                  height={40}
+                  alt="BookNook Logo"
+                  className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0"
+                />
+                <div className="flex flex-col text-left leading-tight">
+                  <div className="font-bold text-xl sm:text-2xl font-josefin tracking-tight whitespace-nowrap">
+                    <span className="text-[#1E3A8A]">Book</span>
+                    <span className="text-red-600">Nook</span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-[#8C5E50] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
+                    A World Between Pages
+                  </span>
+                </div>
+              </Link>
+            </div>
 
             <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-sm mx-auto sm:mx-0">
               An antiquarian borrowing sanctuary and catalog dedicated to deep
@@ -164,17 +180,17 @@ const Footer = () => {
 
           {/* Column 4: Library Circulation & Contact Info */}
           <div className="lg:col-span-3 space-y-3 text-center sm:text-left">
-            <h4 className="font-semibold text-xs sm:text-sm text-primary uppercase tracking-wider font-josefin">
+            <h4 className="max-sm:hidden font-semibold text-xs sm:text-sm text-primary uppercase tracking-wider font-josefin">
               Library Circulation
             </h4>
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-xs mx-auto sm:mx-0">
+            <p className="max-sm:hidden text-xs sm:text-sm text-gray-600 leading-relaxed max-w-xs mx-auto sm:mx-0">
               Borrowing desk open Monday to Saturday for requests, rare archive
               appointments, and reservation dispatch.
             </p>
 
             <div className="space-y-2.5 pt-1 text-xs sm:text-sm flex flex-col items-center sm:items-start w-full">
               <div className="flex items-center justify-center sm:justify-start space-x-2 text-gray-700 w-full">
-                <Mail className="w-3.5 h-3.5 text-secondary shrink-0" />
+                <Mail className="w-3.5 h-3.5 text-primary shrink-0" />
                 <a
                   href="mailto:mdrezanurrahman2@gmail.com"
                   className="hover:text-primary transition-colors"
@@ -184,7 +200,7 @@ const Footer = () => {
               </div>
 
               <div className="flex items-center justify-center sm:justify-start space-x-2 text-gray-700 w-full">
-                <MapPin className="w-3.5 h-3.5 text-secondary shrink-0" />
+                <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
                 <span>42 Parchment Row, Bloomsbury</span>
               </div>
             </div>

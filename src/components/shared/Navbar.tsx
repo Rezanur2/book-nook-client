@@ -24,7 +24,7 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link href="/all-books" className={linkStyles("/all-books")}>
+        <Link href="/books" className={linkStyles("/books")}>
           All Books
         </Link>
       </li>
@@ -49,17 +49,24 @@ const Navbar = () => {
   return (
     <div className="navbar bg-[#8E4C39] px-3 py-2.5 shadow-sm">
       <nav className="container mx-auto flex items-center justify-between w-full">
+        {/* Logo and Brand */}
         <div className="flex items-center shrink-0">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-3">
             <Image
               src={Logo}
-              width={36}
-              height={36}
-              alt="BookNook"
-              className="w-8 h-8 sm:w-10 sm:h-10"
+              width={40}
+              height={40}
+              alt="BookNook Logo"
+              className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0"
             />
-            <div className="text-white font-bold text-lg sm:text-xl font-josefin whitespace-nowrap">
-              BookNook
+            <div className="flex flex-col text-left leading-tight">
+              <div className="font-bold text-xl sm:text-2xl font-josefin tracking-tight whitespace-nowrap">
+                <span className="text-white">Book</span>
+                <span className="text-red-600">Nook</span>
+              </div>
+              <span className="text-[10px] font-semibold text-[#F0EDE5]/90 tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
+                A World Between Pages
+              </span>
             </div>
           </Link>
         </div>
