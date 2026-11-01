@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Josefin_Sans } from "next/font/google";
+import { Josefin_Sans, Playfair } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const josefinSans = Josefin_Sans({
   subsets: ["latin"],
+  variable: "--font-josefin",
+});
+
+const playfair = Playfair({
+  subsets: ["latin"],
+  variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -14,8 +21,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${josefinSans.className}  h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="en"
+      className={`${josefinSans.variable} ${playfair.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-[#FBF9F4] text-[#292521]">
+        <Navbar />
+        <main>
+          {children}
+        </main> 
+      </body>
     </html>
   );
 }
