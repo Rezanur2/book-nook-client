@@ -8,8 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
 const AddBookPage = () => {
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -31,6 +33,7 @@ const AddBookPage = () => {
         description: "The book has been added to the catalog.",
         type: "success",
       });
+      router.push("/books");
     } else {
       toast.add({
         title: "Failed to Add Book",
