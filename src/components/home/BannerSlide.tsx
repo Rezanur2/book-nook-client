@@ -35,7 +35,7 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            href="/borrowing-guide"
+            href="/how-borrowing-works"
             className={`${btnClass} border border-[#E6E0D6] bg-white hover:bg-[#F0EDE5] text-gray-700`}
           >
             <span>How Borrowing Works</span>

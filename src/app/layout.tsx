@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${josefinSans.variable} ${playfair.variable} h-full antialiased`}
+      className={`${josefinSans.variable} ${playfair.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col bg-[#FBF9F4] text-[#292521]">
         <Suspense fallback={<nav className="h-16 bg-[#8E4C39]" />}>
