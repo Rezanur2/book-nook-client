@@ -4,6 +4,13 @@ import { IBook } from "@/types/book.type";
 import { BookOpen } from "lucide-react";
 import Link from "next/link";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "All Books | BookNook",
+  description: "Explore our collection of available books in the library.",
+};
+
 
 const AllBooksPage = async () => {
   const books = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {

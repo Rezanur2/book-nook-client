@@ -23,11 +23,11 @@ const Footer = () => {
                   className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0"
                 />
                 <div className="flex flex-col text-left leading-tight">
-                  <div className="font-bold text-xl sm:text-2xl font-josefin tracking-tight whitespace-nowrap">
-                    <span className="text-[#1E3A8A]">Book</span>
+                  <div className="font-bold text-lg sm:text-xl md:text-2xl font-josefin tracking-tight whitespace-nowrap">
+                    <span className="text-[#000000]">Book</span>
                     <span className="text-red-600">Nook</span>
                   </div>
-                  <span className="text-[10px] font-semibold text-[#8C5E50] tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-[#8C5E50] sm:tracking-[0.2em] uppercase mt-0.5 whitespace-nowrap">
                     A World Between Pages
                   </span>
                 </div>
