@@ -2,6 +2,7 @@ import Banner from "@/components/home/Banner";
 import NewArrivals from "@/components/home/NewArrivals";
 import HowBorrowingWorks from "@/components/home/HowBorrowingWorks";
 import TopCategories from "@/components/home/TopCategories";
+import JoinCommunity from "@/components/home/JoinCommunity";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <NewArrivals />
       <HowBorrowingWorks />
       <TopCategories />
+      <JoinCommunity />
     </div>
   );
 }
