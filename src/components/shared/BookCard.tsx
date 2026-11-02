@@ -2,19 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 import Image from "next/image";
+import { IBook } from "@/types/book.type";
+export type BookType = IBook;
 
-export interface BookType {
-  _id: string;
-  title: string;
-  author: string;
-  category: string;
-  image: string;
-  description?: string;
-  totalCopies?: number;
-  availableCopies?: number;
-}
 
-const BookCard = ({ book }: { book: BookType }) => {
+const BookCard = ({ book }: { book: IBook }) => {
   // Check stock availability
   const copies = book.availableCopies ?? book.totalCopies ?? 1;
   const isAvailable = copies > 0;

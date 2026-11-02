@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
-import BookCard, { BookType } from "@/components/shared/BookCard";
+import BookCard from "@/components/shared/BookCard";
+import { IBook } from "@/types/book.type";
 import { BookOpen } from "lucide-react";
 import Link from "next/link";
 
-export const instant = false;
 
 const AllBooksPage = async () => {
   const books = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {
@@ -11,8 +11,8 @@ const AllBooksPage = async () => {
   });
   const booksData = await books.json();
 
-  const bookList: BookType[] = Array.isArray(booksData)
-    ? [...booksData].sort((a: BookType, b: BookType) =>
+  const bookList: IBook[] = Array.isArray(booksData)
+    ? [...booksData].sort((a: IBook, b: IBook) =>
         b._id.localeCompare(a._id),
       )
     : [];
@@ -25,7 +25,10 @@ const AllBooksPage = async () => {
           <Link href="/" className="hover:text-primary">
             Home
           </Link>{" "}
-          / All Books
+          /{" "}
+          <span className="text-primary border-b-2 border-primary pb-0.5">
+            All Books
+          </span>
         </p>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E6E0D6] pb-6">
           <div className="space-y-2 max-w-2xl">
@@ -50,19 +53,35 @@ const AllBooksPage = async () => {
           </div>
         </div>
 
-        {/* Books Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookList.map((book: BookType) => (
-            <Suspense
-              key={book._id}
-              fallback={
-                <div className="bg-white rounded-2xl border border-[#E6E0D6] p-30.5 shadow-sm" />
-              }
+        {/* Books Grid / Empty Fallback */}
+        {bookList.length === 0 ? (
+          <div className="text-center py-16 px-4 bg-white rounded-2xl border border-[#E6E0D6] space-y-3">
+            <BookOpen className="w-10 h-10 text-gray-400 mx-auto" />
+            <h3 className="text-lg font-semibold font-playfair text-[#292521]">No Books Found</h3>
+            <p className="text-sm text-gray-500 max-w-sm mx-auto">
+              Our shelves are currently empty. Be the first to catalog a book!
+            </p>
+            <Link
+              href="/add-book"
+              className="inline-block mt-2 text-xs font-semibold bg-[#762F3D] hover:bg-[#5e2530] text-white px-4 py-2 rounded-lg transition-colors"
             >
-              <BookCard book={book} />
-            </Suspense>
-          ))}
-        </div>
+              Add a Book
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {bookList.map((book: IBook) => (
+              <Suspense
+                key={book._id}
+                fallback={
+                  <div className="bg-white rounded-2xl border border-[#E6E0D6] p-4 shadow-sm" />
+                }
+              >
+                <BookCard book={book} />
+              </Suspense>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

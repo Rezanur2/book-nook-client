@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Josefin_Sans, Playfair } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${josefinSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#FBF9F4] text-[#292521]">
-        <Navbar />
+        <Suspense fallback={<nav className="h-16 bg-[#8E4C39]" />}>
+          <Navbar />
+        </Suspense>
         <main className="flex-1">
           {children}
         </main> 

@@ -56,7 +56,10 @@ const AddBookPage = () => {
             <Link href="/books" className="hover:text-primary">
               Catalog
             </Link>{" "}
-            / Add a Book
+            /{" "}
+            <span className="text-primary border-b-2 border-primary pb-0.5">
+              Add a Book
+            </span>
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-primary mt-1">
             Add a New Book
