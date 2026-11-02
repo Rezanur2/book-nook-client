@@ -1,11 +1,15 @@
 import Banner from "@/components/home/Banner";
-import CirculationEthos from "@/components/home/CirculationEthos";
+import NewArrivals from "@/components/home/NewArrivals";
+import HowBorrowingWorks from "@/components/home/HowBorrowingWorks";
+import TopCategories from "@/components/home/TopCategories";
 
 export default function Home() {
   return (
-    <div>
+    <div className="space-y-0">
       <Banner />
-      <CirculationEthos />
+      <NewArrivals />
+      <HowBorrowingWorks />
+      <TopCategories />
     </div>
   );
 }

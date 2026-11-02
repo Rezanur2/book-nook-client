@@ -123,3 +123,8 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* 80px offset so sticky navbar never hides section tops */
+}

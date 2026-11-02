@@ -213,12 +213,12 @@ const Footer = () => {
 
           <div className="flex items-center space-x-5">
             <Link
-              href="/privacy"
+              href="/#privacy"
               className="hover:text-primary transition-colors"
             >
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">
+            <Link href="/how-borrowing-works" className="hover:text-primary transition-colors">
               Terms of Lending
             </Link>
           </div>

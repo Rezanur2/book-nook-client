@@ -57,8 +57,9 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-[#F5F3EE] text-[#5C554E] px-3 py-2.5 shadow-sm">
-      <nav className="container mx-auto flex items-center justify-between w-full">
+    <header className="sticky top-0 z-50 w-full bg-[#F5F3EE]/95 backdrop-blur-md border-b border-[#E6E0D6] shadow-xs transition-all">
+      <div className="navbar text-[#5C554E] px-3 py-2.5 sm:py-3.5">
+        <nav className="container mx-auto flex items-center justify-between w-full">
         {/* Logo and Brand */}
         <div className="flex items-center shrink-0">
           <Link href="/" className="flex items-center space-x-3">
@@ -126,7 +127,8 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-    </div>
+      </div>
+    </header>
   );
 };
 

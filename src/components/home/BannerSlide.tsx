@@ -12,7 +12,7 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center py-2">
       {/* Left: Typography & Actions */}
       <div className="lg:col-span-7 space-y-4 text-left">
-        <span className="inline-flex items-center gap-2 bg-[#F0EDE5] border border-[#E6E0D6] px-3.5 py-1.5 rounded-full text-[11px] font-semibold uppercase tracking-wider text-[#77716A]">
+        <span className="inline-flex items-center gap-2 bg-[#F0EDE5] border border-[#E6E0D6] px-3.5 py-1.5 rounded-full text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#77716A]">
           <span className="w-1.5 h-1.5 rounded-full bg-[#762F3D]" />
           {slide.pill}
         </span>
@@ -31,32 +31,31 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
             href="/books"
             className={`${btnClass} bg-[#762F3D] hover:bg-[#5e2530] text-white shadow-sm`}
           >
-            <span>Explore Our Library</span>
+            <span>Browse Books</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
-          <Link
-            href="/how-borrowing-works"
-            className={`${btnClass} border border-[#E6E0D6] bg-white hover:bg-[#F0EDE5] text-gray-700`}
+          <a
+            href="#how-borrowing-works"
+            className={`${btnClass} border border-[#E6E0D6] bg-white hover:bg-[#F0EDE5] text-gray-700 cursor-pointer`}
           >
             <span>How Borrowing Works</span>
             <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+          </a>
         </div>
       </div>
 
       {/* Right: Archival Book Folio Card */}
       <div className="lg:col-span-5 flex justify-center lg:justify-end py-4 px-3 sm:px-6">
         <div className="relative w-64 sm:w-72 lg:w-80 my-2">
-          {/* Soft ambient glow that tapers naturally without hard edge cuts */}
           <div className="absolute inset-0 bg-linear-to-tr from-[#B76E59]/20 via-[#C6A46A]/15 to-transparent rounded-3xl blur-xl -z-20 pointer-events-none" />
 
-          {/* Layer 1: Back Archival Parchment Sheet */}
+          {/* Layer 1: Back Archival */}
           <div className="absolute inset-0 bg-[#EDE7DC] border border-[#DDD5C7] rounded-2xl -rotate-2 sm:-rotate-3 scale-96 shadow-xs -z-10 pointer-events-none transition-transform" />
 
           {/* Layer 2: Middle Vellum Sheet */}
           <div className="absolute inset-0 bg-[#F7F4EE] border border-[#E6E0D6] rounded-2xl rotate-1 sm:rotate-2 scale-98 shadow-xs -z-10 pointer-events-none transition-transform" />
 
-          {/* Foreground Card with softly blended shadow */}
+          {/* Foreground Card*/}
           <div className="bg-white border border-[#E6E0D6] rounded-2xl shadow-md shadow-[#762F3D]/5 overflow-hidden flex flex-col">
             <div className="px-5 pt-4 pb-2.5 flex items-center justify-between border-b border-[#F0EDE5]">
               <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded bg-[#B76E59]/10 text-[#B76E59] border border-[#B76E59]/20">

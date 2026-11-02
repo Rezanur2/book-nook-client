@@ -25,7 +25,7 @@ const AllBooksPage = async () => {
     : [];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header Section */}
         <p className="text-xs font-semibold tracking-wider uppercase text-gray-500">

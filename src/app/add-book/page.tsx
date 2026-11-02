@@ -44,7 +44,7 @@ const AddBookPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div className="border-b border-border pb-4">

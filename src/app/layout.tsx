@@ -26,10 +26,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${josefinSans.variable} ${playfair.variable} h-full antialiased scroll-smooth`}
+      className={`${josefinSans.variable} ${playfair.variable} h-full antialiased scroll-smooth scroll-pt-20`}
     >
       <body className="min-h-full flex flex-col bg-[#FBF9F4] text-[#292521]">
-        <Suspense fallback={<nav className="h-16 bg-[#8E4C39]" />}>
+        <Suspense fallback={<div className="h-16 w-full bg-[#F5F3EE] border-b border-[#E6E0D6] sticky top-0 z-50" />}>
           <Navbar />
         </Suspense>
         <main className="flex-1">
