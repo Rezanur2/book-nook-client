@@ -11,7 +11,7 @@ const Footer = () => {
   const pathname = usePathname();
 
   // Hide footer on auth pages for a dedicated full-screen layout
-  if (pathname === "/login" || pathname === "/register") {
+  if (pathname === "/login" || pathname === "/signup") {
     return null;
   }
   return (

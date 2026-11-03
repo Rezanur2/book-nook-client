@@ -122,8 +122,8 @@ export default function LoginPage() {
         </div>
 
         {/* Bottom Trust & Copyright */}
-        <div className="h-14 border-t border-[#E6E0D6] flex items-center justify-between text-xs text-gray-500 shrink-0">
-          <span>🔒 256-Bit Patron Encryption</span>
+        <div className="h-auto sm:h-14 border-t border-[#E6E0D6] flex flex-col sm:flex-row items-center justify-center sm:justify-between text-xs text-gray-500 shrink-0 gap-1.5 sm:gap-0 py-3 sm:py-0 text-center">
+          <span>🔒 256-Bit Secure Encryption</span>
           <span>
             &copy; {new Date().getFullYear()} BookNook &bull; Sanctuary of
             Curiosity

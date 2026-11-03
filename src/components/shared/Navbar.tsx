@@ -8,7 +8,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   // Hide navbar on auth pages for an immersive, full-screen experience
-  if (pathname === "/login" || pathname === "/register") {
+  if (pathname === "/login" || pathname === "/signup") {
     return null;
   }
 
