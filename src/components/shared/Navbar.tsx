@@ -7,6 +7,11 @@ import { usePathname } from "next/navigation";
 const Navbar = () => {
   const pathname = usePathname();
 
+  // Hide navbar on auth pages for an immersive, full-screen experience
+  if (pathname === "/login" || pathname === "/register") {
+    return null;
+  }
+
   const linkStyles = (path: string) => {
     const isActive = pathname === path;
     return `relative px-3.5 py-1.5 text-sm font-semibold tracking-wide rounded-lg transition-all duration-200 ease-out inline-flex items-center justify-center ${

@@ -36,7 +36,7 @@ const categories = [
     icon: Palette,
   },
   {
-    title: "Memoirs & Biographies",
+    title: "Memories & Biographies",
     description: "Intimate life journeys, extraordinary memoirs, and letters of historic figures.",
     icon: Layers,
   },

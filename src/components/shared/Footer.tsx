@@ -1,10 +1,19 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Mail, MapPin } from "lucide-react";
 import Logo from "@/assets/booknook.png";
 
 const Footer = () => {
+  const pathname = usePathname();
+
+  // Hide footer on auth pages for a dedicated full-screen layout
+  if (pathname === "/login" || pathname === "/register") {
+    return null;
+  }
   return (
     <footer className="border-t border-border bg-[#F5F3EE] text-[#5C554E] pt-12 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -218,7 +227,7 @@ const Footer = () => {
             >
               Privacy Policy
             </Link>
-            <Link href="/how-borrowing-works" className="hover:text-primary transition-colors">
+            <Link href="/#how-borrowing-works" className="hover:text-primary transition-colors">
               Terms of Lending
             </Link>
           </div>
