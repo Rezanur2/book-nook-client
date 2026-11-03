@@ -12,6 +12,9 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
+import { toast } from "@/components/ui/toast";
 
 export function SignUpForm({
   className,
@@ -23,8 +26,35 @@ export function SignUpForm({
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
 
+  const handleEmailSignUp = async(e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const user = Object.fromEntries(formData.entries()) as {name:string, photoURL:string, email:string, password:string}
+
+    const { data, error } = await authClient.signUp.email({
+      ...user,
+    })
+
+    if (error) {
+      toast.add({
+        title: "Registration Failed!",
+        description: error.message,
+      });
+      return;
+    }
+
+    if (data) {
+      toast.add({
+        title: "Account Created Successfully!",
+        description: "Welcome to BookNook. Please login to continue.",
+      });
+
+      redirect("/login");
+    }
+  };
+
   return (
-    <form className={cn("flex flex-col gap-5", className)} {...props}>
+    <form className={cn("flex flex-col gap-5", className)} {...props} onSubmit={handleEmailSignUp}>
       <FieldGroup>
         {/* Title Header */}
         <div className="flex flex-col items-center gap-1.5 text-center mb-1">
