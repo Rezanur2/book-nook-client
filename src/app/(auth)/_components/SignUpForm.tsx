@@ -21,6 +21,7 @@ export function SignUpForm({
   ...props
 }: React.ComponentProps<"form">) {
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const hasMinLength = password.length >= 6;
   const hasUppercase = /[A-Z]/.test(password);
@@ -28,11 +29,35 @@ export function SignUpForm({
 
   const handleEmailSignUp = async(e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
+    setPasswordError("");
+
+    //  Password Validation
+    if (!hasMinLength) {
+      const msg = "Password must be at least 6 characters long.";
+      setPasswordError(msg);
+      return;
+    }
+
+    if (!hasUppercase) {
+      const msg = "Password must contain at least one uppercase letter (A-Z).";
+      setPasswordError(msg);
+      return;
+    }
+
+    if (!hasLowercase) {
+      const msg = "Password must contain at least one lowercase letter (a-z).";
+      setPasswordError(msg);
+      return;
+    }
+
     const formData = new FormData(e.target)
     const user = Object.fromEntries(formData.entries()) as {name:string, photoURL:string, email:string, password:string}
 
     const { data, error } = await authClient.signUp.email({
-      ...user,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      image: user.photoURL,
     })
 
     if (error) {
@@ -186,7 +211,10 @@ export function SignUpForm({
               name="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError("");
+              }}
               placeholder="••••••••"
               required
               className="pl-10 h-10 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
@@ -243,6 +271,14 @@ export function SignUpForm({
             </div>
           </div>
         </div>
+
+        {/* Inline Password Validation Error */}
+        {passwordError && (
+          <p className="text-xs text-red-600 font-semibold flex items-center gap-1.5 px-1 animate-fade-in">
+            <span>⚠️</span>
+            <span>{passwordError}</span>
+          </p>
+        )}
 
         {/* Terms Checkbox */}
         <div className="flex items-center gap-2.5 pt-1">

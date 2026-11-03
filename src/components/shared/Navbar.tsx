@@ -3,9 +3,15 @@ import Image from "next/image";
 import Logo from "@/assets/booknook.png";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { data: session } = authClient.useSession()
+  
+  const user = session?.user;
+
 
   // Hide navbar on auth pages for an immersive, full-screen experience
   if (pathname === "/login" || pathname === "/signup") {
@@ -90,16 +96,26 @@ const Navbar = () => {
         <div className="hidden lg:flex">
           <ul className="flex space-x-6 menu menu-horizontal px-1">{links}</ul>
         </div>
-
-        <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-          {/* Login Button */}
-          <Link href="/login" className={loginButtonStyles}>
-            Login
-          </Link>
-          {/* Sign Up Button */}
-          <Link href="/signup" className={signupButtonStyles}>
-            Sign Up
-          </Link>
+          <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            {user ? (
+              <Avatar className="w-8 h-8 sm:w-9 sm:h-9">
+                <AvatarImage referrerPolicy="no-referrer" src={(user?.image) as string} alt={user?.name || "User"} />
+                <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
+                  {user?.name?.charAt(0) || "U"}
+                </AvatarFallback>
+              </Avatar>
+            ) : (
+              <>
+                {/* Login Button */}
+                <Link href="/login" className={loginButtonStyles}>
+                  Login
+                </Link>
+                {/* Sign Up Button */}
+                <Link href="/signup" className={signupButtonStyles}>
+                  Sign Up
+                </Link>
+              </>
+            )}
           {/* Responsive Menu Button */}
           <div className="dropdown dropdown-end lg:hidden relative">
             <div

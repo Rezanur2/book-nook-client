@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 import { ArrowRight, Mail, Lock } from "lucide-react";
@@ -10,13 +11,45 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/toast";
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+
+    const handleEmailLogIn = async(e: React.SubmitEvent<HTMLElement>) => {
+      e.preventDefault();
+      const formData = new FormData(e.target)
+      const user = Object.fromEntries(formData.entries()) as {email:string, password:string}
+  
+      const { data, error } = await authClient.signIn.email({
+        email: user.email,
+        password: user.password,
+      })
+  
+      if (error) {
+        toast.add({
+          title: "Login Failed!",
+          description: error.message,
+        });
+        return;
+      }
+  
+      if (data) {
+        toast.add({
+          title: "Welcome Back!",
+          description: "You have successfully logged in.", 
+        });
+  
+        redirect("/");
+      }
+    };
+  
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleEmailLogIn}>
       <FieldGroup>
         {/* Title Header */}
         <div className="flex flex-col items-center gap-1.5 text-center mb-1">

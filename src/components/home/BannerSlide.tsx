@@ -5,16 +5,16 @@ import { ArrowRight, BookOpen, Check, Star } from "lucide-react";
 import { ISlide } from "@/types/slide.type";
 
 const btnClass =
-  "px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 w-full md:w-auto shrink-0 whitespace-nowrap";
+  "px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 w-auto md:w-auto shrink-0 whitespace-nowrap mx-2 sm:mx-0";
 
 const BannerSlide = ({ slide }: { slide: ISlide }) => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center py-2">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center py-2 w-full max-w-full min-w-0 overflow-hidden">
       {/* Left: Typography & Actions */}
-      <div className="lg:col-span-7 space-y-4 text-left">
-        <span className="inline-flex items-center gap-2 bg-[#F0EDE5] border border-[#E6E0D6] px-3.5 py-1.5 rounded-full text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#77716A]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#762F3D]" />
-          {slide.pill}
+      <div className="lg:col-span-7 space-y-4 text-left w-full min-w-0">
+        <span className="inline-flex items-center gap-2 bg-[#F0EDE5] border border-[#E6E0D6] px-3.5 py-1.5 rounded-full text-[9px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#77716A] max-w-full">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#762F3D] shrink-0" />
+          <span className="truncate">{slide.pill}</span>
         </span>
 
         <h1 className="text-3xl sm:text-5xl lg:text-[50px] font-bold font-playfair text-[#762F3D] leading-[1.15] tracking-tight">
@@ -26,7 +26,7 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
         </p>
 
         {/* Responsive CTA Buttons */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pt-2">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pt-2 px-1 sm:px-0">
           <Link
             href="/books"
             className={`${btnClass} bg-[#762F3D] hover:bg-[#5e2530] text-white shadow-sm`}
@@ -45,8 +45,8 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
       </div>
 
       {/* Right: Archival Book Folio Card */}
-      <div className="lg:col-span-5 flex justify-center lg:justify-end py-4 px-3 sm:px-6">
-        <div className="relative w-64 sm:w-72 lg:w-80 my-2">
+      <div className="lg:col-span-5 flex justify-center lg:justify-end py-4 px-2 sm:px-6 w-full min-w-0 overflow-hidden">
+        <div className="relative w-full max-w-[270px] sm:max-w-[290px] lg:max-w-80 my-2">
           <div className="absolute inset-0 bg-linear-to-tr from-[#B76E59]/20 via-[#C6A46A]/15 to-transparent rounded-3xl blur-xl -z-20 pointer-events-none" />
 
           {/* Layer 1: Back Archival */}

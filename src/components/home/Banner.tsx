@@ -72,8 +72,11 @@ const Banner = () => {
           modules={[Autoplay]}
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           slidesPerView={1}
-          spaceBetween={0}
+          spaceBetween={24}
           loop={true}
+          observer={true}
+          observeParents={true}
+          resizeObserver={true}
           onSwiper={setSwiper}
           onSlideChange={(s) => setActiveIndex(s.realIndex)}
           className="w-full overflow-hidden"
@@ -88,7 +91,11 @@ const Banner = () => {
         {/* Dot/Pill Navigation Bar */}
         <div className="mt-3 pt-3 border-t border-[#E6E0D6] flex items-center justify-between gap-3">
           <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 shrink-0">
-            SLIDE <strong className="text-gray-900 text-sm">0{activeIndex + 1}</strong> / 03
+            SLIDE{" "}
+            <strong className="text-gray-900 text-sm">
+              0{activeIndex + 1}
+            </strong>{" "}
+            / 03
           </span>
 
           <div className="flex items-center gap-2">
