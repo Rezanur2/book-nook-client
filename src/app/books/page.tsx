@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import BookCard from "@/components/shared/BookCard";
 import { IBook } from "@/types/book.type";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { BookOpen } from "lucide-react";
 import Link from "next/link";
 
@@ -27,18 +28,10 @@ const AllBooksPage = async () => {
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header Section */}
-        <p className="text-xs font-semibold tracking-wider uppercase text-gray-500">
-          <Link href="/" className="hover:text-primary">
-            Home
-          </Link>{" "}
-          /{" "}
-          <span className="text-primary border-b-2 border-primary pb-0.5">
-            All Books
-          </span>
-        </p>
+        {/* Breadcrumb */}
+        <Breadcrumb items={[{ label: "All Books" }]} />
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E6E0D6] pb-6">
-          <div className="space-y-2 max-w-2xl">
+          <div className="space-y-2 sm:w-[70%] max-lg:w-[70%] max-w-2xl">
             <p className="text-xs font-semibold tracking-widest uppercase text-[#B76E59]">
               THE MAIN READING ROOMS &bull; Archival Ledger 2025
             </p>

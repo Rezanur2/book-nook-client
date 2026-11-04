@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BookOpen, User } from "lucide-react";
+import Breadcrumb from "@/components/shared/Breadcrumb";
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { IBook } from "@/types/book.type";
 import { toast } from "@/components/ui/toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface BookDetailsProps {
   params: Promise<{ id: string }>;
@@ -58,47 +60,39 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
   const borrowedCopies = Math.max(0, totalCopies - availableCopies);
   const isAvailable = availableCopies > 0;
 
-  // Who added the book
-  const addedByName = book.addedBy?.name || "Library Patron";
-  const addedByEmail = book.addedBy?.email || null;
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Breadcrumb */}
-        <p className="text-xs font-semibold tracking-wider uppercase text-gray-500">
-          <Link href="/" className="hover:text-primary">
-            Home
-          </Link>{" "}
-          /{" "}
-          <Link href="/books" className="hover:text-primary">
-            Catalog
-          </Link>{" "}
-          /{" "}
-          <span className="text-primary border-b-2 border-primary pb-0.5">
-            {book.title}
-          </span>
-        </p>
+        <Breadcrumb
+          items={[
+            { label: "All Books", href: "/books" },
+            { label: book.title },
+          ]}
+        />
 
         {/* Main Details Card */}
-        <div className="bg-white rounded-2xl border border-[#E6E0D6] p-6 sm:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <div className="bg-white rounded-2xl border border-[#E6E0D6] p-5 sm:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* 1. Book Cover Image */}
-          <div className="md:col-span-5 relative w-full aspect-3/4 rounded-xl overflow-hidden bg-[#FAF8F3] border border-[#E6E0D6]">
-            <Image
-              src={
-                book.image ||
-                "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop"
-              }
-              alt={book.title}
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 40vw"
-              className="object-cover"
-            />
+          <div className="md:col-span-4 flex justify-center w-full">
+            <div className="relative w-full max-w-55 sm:max-w-65 md:max-w-full aspect-3/4 rounded-2xl overflow-hidden bg-[#FAF8F3] border border-[#E6E0D6] shadow-md shadow-amber-950/5">
+              <Image
+                src={
+                  book.image ||
+                  "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop"
+                }
+                alt={book.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 260px, 300px"
+                className="object-cover"
+              />
+            </div>
           </div>
 
           {/* 2. Book Info */}
-          <div className="md:col-span-7 space-y-4">
+          <div className="md:col-span-8 space-y-4">
             <div>
               <div className="flex items-center justify-between gap-2">
                 {/* Category */}
@@ -128,7 +122,7 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
               </div>
 
               {/* Title */}
-              <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-[#292521] mt-2 leading-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-[#762F3D] mt-2 leading-tight">
                 {book.title}
               </h1>
 
@@ -184,18 +178,31 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
               </p>
             </div>
 
-            {/* Who Added It */}
-            <div className="border-t border-[#F0EDE5] pt-3 flex items-center gap-2 text-xs text-gray-600">
-              <User className="w-4 h-4 text-[#B76E59] shrink-0" />
-              <span>
-                Added by:{" "}
-                <strong className="text-gray-800 font-semibold">
-                  {addedByName}
-                </strong>
-                {addedByEmail && (
-                  <span className="text-gray-400"> ({addedByEmail})</span>
+            {/* Added by Section */}
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
+              <Avatar className="w-8 h-8 sm:w-9 sm:h-9">
+                <AvatarImage
+                  referrerPolicy="no-referrer"
+                  src={(book?.creatorImage) as string}
+                  alt={book?.creatorName || "User"}
+                />
+                <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
+                  {book?.creatorName?.charAt(0) || "😎" || "U"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                  Added by
+                </span>
+                <span className="text-xs font-bold text-gray-800 block truncate">
+                  {book.creatorName || "Librarian"}
+                </span>
+                {book.creatorEmail && (
+                  <span className="text-[11px] text-gray-500 block truncate">
+                    {book.creatorEmail}
+                  </span>
                 )}
-              </span>
+              </div>
             </div>
 
             {/* Borrow This Book Button & Back to Catalog */}

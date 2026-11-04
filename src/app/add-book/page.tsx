@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 import { ArrowRight, BookPlus, Upload, User, Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,13 +9,34 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
+import { Spinner } from "@/components/ui/spinner";
 
 const AddBookPage = () => {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center h-[85vh]">
+        <Spinner className="size-8 text-[#762F3D]" />
+      </div>
+    );
+  }
+  
+  const user = session?.user;
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const book = Object.fromEntries(formData.entries());
+    const formValues = Object.fromEntries(formData.entries());
+    const book = {
+      ...formValues,
+      creatorName: user?.name,
+      creatorEmail: user?.email,
+      createdAt: new Date().toISOString(),
+      creatorImage: user?.image,
+    };
 
     const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {
       method: "POST",
@@ -46,26 +67,16 @@ const AddBookPage = () => {
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-6">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[{ label: "Add Book" }]} />
+
         {/* Header */}
-        <div className="border-b border-border pb-4">
-          <p className="text-xs font-semibold tracking-wider uppercase text-gray-500">
-            <Link href="/" className="hover:text-primary">
-              Home
-            </Link>{" "}
-            /{" "}
-            <Link href="/books" className="hover:text-primary">
-              Catalog
-            </Link>{" "}
-            /{" "}
-            <span className="text-primary border-b-2 border-primary pb-0.5">
-              Add a Book
-            </span>
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-primary mt-1">
+        <div className="border-b border-[#E6E0D6] pb-6">
+          <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
             Add a New Book
           </h1>
           <p className="text-sm text-gray-600 mt-1">
-            Catalog a physical volume into the collective lending sanctuary.
+            Contribute a physical volume to the BookNook library collection.
           </p>
         </div>
 
@@ -196,8 +207,8 @@ const AddBookPage = () => {
                 </Label>
                 <Input
                   readOnly
-                  disabled
-                  value={"John Doe"}
+                  value={user?.name}
+                  placeholder="Loading user name..."
                   className="h-11 bg-white/70 border-border text-sm text-gray-700 cursor-not-allowed font-medium"
                 />
               </div>
@@ -209,8 +220,8 @@ const AddBookPage = () => {
                 </Label>
                 <Input
                   readOnly
-                  disabled
-                  value={"john.doe@booknook.lib"}
+                  value={user?.email}
+                  placeholder="Loading user email..."
                   className="h-11 bg-white/70 border-border text-sm text-gray-700 cursor-not-allowed font-medium"
                 />
               </div>

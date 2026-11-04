@@ -1,9 +1,33 @@
 import React from "react";
+import type { Metadata } from "next";
+import Breadcrumb from "@/components/shared/Breadcrumb";
+import NoBorrows from "./_components/NoBorrows";
+
+export const metadata: Metadata = {
+  title: "My Borrows | BookNook",
+  description: "View and manage your borrowed books from the BookNook library.",
+};
 
 const MyBorrowsPage = () => {
   return (
-    <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] py-12 px-4 font-bold text-3xl sm:text-5xl font-playfair bg-[#FAF8F3] text-[#762F3D]">
-      My Borrows Page
+    <div className="min-h-screen bg-[#FAF8F3] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Breadcrumb */}
+        <Breadcrumb items={[{ label: "My Borrows" }]} />
+
+        {/* Header */}
+        <div className="border-b border-[#E6E0D6] pb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-[#762F3D] tracking-tight">
+            My Borrowed Books
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            Track and manage all the books you have currently borrowed.
+          </p>
+        </div>
+
+        {/* Empty State Component */}
+        <NoBorrows />
+      </div>
     </div>
   );
 };

@@ -11,9 +11,10 @@ export interface IBook {
   reviewsCount?: number;
   isbn?: string;
   edition?: string;
-  addedBy?: {
-    name?: string;
-    email?: string;
-  };
+  userName?: string;
+  userEmail?: string;
+  creatorName?: string;
+  creatorEmail?: string;
+  creatorImage?: string;
   createdAt?: string | Date;
 }

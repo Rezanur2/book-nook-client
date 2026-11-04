@@ -3,6 +3,11 @@
 @import "shadcn/tailwind.css";
 @plugin "daisyui";
 
+[popover] {
+  border: none;
+  outline: none;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
