@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Eye, Layers, Library, Trash2 } from "lucide-react";
+import { BookOpen, Eye, Layers, Library } from "lucide-react";
 import { IBook } from "@/types/book.type";
 import EditBooksDialog from "./EditBooksDialog";
+import DeleteBooksDialog from "./DeleteBooksDialog";
 
 interface MyBooksListProps {
   books: IBook[];
@@ -163,13 +164,7 @@ export default function MyBooksList({ books, onBookUpdated }: MyBooksListProps) 
                 <span>View</span>
               </Link>
 
-              <button
-                type="button"
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 text-xs font-semibold text-[#E11D48] bg-white hover:bg-rose-50 border border-rose-200 rounded-xl sm:rounded-full transition-colors cursor-pointer shadow-xs w-full sm:w-auto"
-              >
-                <Trash2 className="w-3.5 h-3.5 text-[#E11D48]" />
-                <span>Delete</span>
-              </button>
+              <DeleteBooksDialog book={book} onBookDeleted={onBookUpdated} />
             </div>
           </div>
         ))}
