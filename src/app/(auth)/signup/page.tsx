@@ -8,7 +8,7 @@ import AuthBackground from "@/assets/AuthBackground.png";
 import { SignUpForm } from "@/app/(auth)/_components/SignUpForm";
 
 export const metadata: Metadata = {
-  title: "Sign Up | BookNook",
+  title: "BookNook | Register",
   description:
     "Sign up for your reader account to borrow books, reserve editions, and contribute to the BookNook library.",
 };

@@ -8,7 +8,7 @@ import AuthBackground from "@/assets/AuthBackground.png";
 import { LoginForm } from "@/app/(auth)/_components/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Login | BookNook",
+  title: "BookNook | Login",
   description:
     "Enter your email below to access your BookNook sanctuary account.",
 };

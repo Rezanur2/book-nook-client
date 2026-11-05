@@ -1,14 +1,52 @@
 import React from "react";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import NoBorrows from "./_components/NoBorrows";
+import MyBorrowsTable from "./_components/MyBorrowsTable";
+import { IBorrow } from "@/types/borrow.type";
 
 export const metadata: Metadata = {
-  title: "My Borrows | BookNook",
-  description: "View and manage your borrowed books from the BookNook library.",
+  title: "BookNook | My Borrows",
+  description: "View and manage all the books you have borrowed from BookNook.",
 };
 
-const MyBorrowsPage = () => {
+export const dynamic = "force-dynamic";
+
+const MyBorrowsPage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/login?callbackUrl=/my-borrows");
+  }
+
+  const email = session.user.email;
+
+  let borrows: IBorrow[] = [];
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows?email=${encodeURIComponent(email)}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        borrows = data;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching borrows:", error);
+  }
+
+  console.log("My Borrows Data:", borrows);
+
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto space-y-6">
@@ -27,8 +65,12 @@ const MyBorrowsPage = () => {
           </div>
         </div>
 
-        {/* Empty State Component */}
-        <NoBorrows />
+        {/* Content: Table or Empty state */}
+        {!borrows || borrows.length === 0 ? (
+          <NoBorrows />
+        ) : (
+          <MyBorrowsTable borrows={borrows} />
+        )}
       </div>
     </div>
   );

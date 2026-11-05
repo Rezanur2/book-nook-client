@@ -42,6 +42,9 @@ export function LoginForm({
 
   const handleGoogleSignIn = async () => {
     try {
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const callbackUrl = params?.get("callbackUrl") || "/";
+
       sessionStorage.setItem("booknook_google_auth", "true");
       toast.add({
         title: "Connecting to Google...",
@@ -50,7 +53,7 @@ export function LoginForm({
       });
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL: callbackUrl,
         errorCallbackURL: "/login?error=cancelled",
       });
     } catch {
@@ -92,7 +95,9 @@ export function LoginForm({
         type: "success",
       });
 
-      router.push("/");
+      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+      const callbackUrl = params?.get("callbackUrl") || "/";
+      router.push(callbackUrl);
     }
   };
 

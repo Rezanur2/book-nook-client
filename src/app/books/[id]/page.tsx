@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { IBook } from "@/types/book.type";
 import { toast } from "@/components/ui/toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BorrowBookModal from "./_components/BorrowBookModal";
 
 interface BookDetailsProps {
   params: Promise<{ id: string }>;
@@ -39,7 +40,7 @@ export async function generateMetadata({
   const book = await getBook(id);
 
   return {
-    title: book?.title ? `${book.title} | BookNook` : "Book Details | BookNook",
+    title: book?.title ? `BookNook | ${book.title}` : "BookNook | Book Details",
   };
 }
 
@@ -205,15 +206,9 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
               </div>
             </div>
 
-            {/* Borrow This Book Button & Back to Catalog */}
+            {/* Borrow This Book Modal & Back to Catalog */}
             <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pt-2">
-              <button
-                disabled={!isAvailable}
-                className="bg-[#762F3D] hover:bg-[#5e2530] text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer w-full md:w-auto shrink-0 whitespace-nowrap"
-              >
-                <BookOpen className="w-4 h-4 shrink-0" />
-                <span>Borrow This Book</span>
-              </button>
+              <BorrowBookModal book={book} />
 
               <Link
                 href="/books"
