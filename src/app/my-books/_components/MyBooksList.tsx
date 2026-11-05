@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Eye, Layers, Library, Pencil, Trash2 } from "lucide-react";
+import { BookOpen, Eye, Layers, Library, Trash2 } from "lucide-react";
 import { IBook } from "@/types/book.type";
+import EditBooksDialog from "./EditBooksDialog";
 
 interface MyBooksListProps {
   books: IBook[];
+  onBookUpdated?: () => void;
 }
 
 // Fallback book cover
@@ -37,7 +39,7 @@ function BookCoverImage({ src, title }: { src?: string; title: string }) {
   );
 }
 
-export default function MyBooksList({ books }: MyBooksListProps) {
+export default function MyBooksList({ books, onBookUpdated }: MyBooksListProps) {
   // 1. Total books
   const totalBooksCount = books.length;
 
@@ -152,14 +154,7 @@ export default function MyBooksList({ books }: MyBooksListProps) {
 
             {/* Bottom / Right: Action Buttons (Edit, View, Delete) */}
             <div className="pt-3 sm:pt-0 border-t sm:border-t-0 border-[#E6E0D6] grid grid-cols-3 sm:flex sm:items-center gap-2 px-0.5 sm:px-0 shrink-0 w-full sm:w-auto">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 text-xs font-semibold text-[#1E293B] bg-white hover:bg-[#FAF8F3] border border-[#E6E0D6] rounded-xl sm:rounded-full transition-colors cursor-pointer shadow-xs w-full sm:w-auto"
-              >
-                <Pencil className="w-3.5 h-3.5 text-[#762F3D]" />
-                <span>Edit</span>
-              </button>
-
+              <EditBooksDialog book={book} onBookUpdated={onBookUpdated} />
               <Link
                 href={`/books/${book._id}`}
                 className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 text-xs font-semibold text-[#1E293B] bg-white hover:bg-[#FAF8F3] border border-[#E6E0D6] rounded-xl sm:rounded-full transition-colors cursor-pointer shadow-xs w-full sm:w-auto"

@@ -7,7 +7,7 @@ import NoBooks from "./_components/NoBooks";
 import MyBooksList from "./_components/MyBooksList";
 import { useSession } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IBook } from "@/types/book.type";
 
 const MyBooksPage = () => {
@@ -18,10 +18,10 @@ const MyBooksPage = () => {
 
   const email = session?.user.email;
 
-  useEffect(() => {
+  const fetchBooks = useCallback(() => {
     if (!email) return;
     fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/my-books/${encodeURIComponent(email)}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/books?email=${encodeURIComponent(email)}`,
     )
       .then((res) => res.json())
       .then((data: IBook[]) => setBooks(data))
@@ -29,6 +29,10 @@ const MyBooksPage = () => {
         setError(true);
       });
   }, [email]);
+
+  useEffect(() => {
+    fetchBooks();
+  }, [fetchBooks]);
 
   if (isPending || (email && !books && !error)) {
     return (
@@ -66,7 +70,11 @@ const MyBooksPage = () => {
         </div>
 
         {/* Content */}
-        {!books || books.length === 0 ? <NoBooks /> : <MyBooksList books={books} />}
+        {!books || books.length === 0 ? (
+          <NoBooks />
+        ) : (
+          <MyBooksList books={books} onBookUpdated={fetchBooks} />
+        )}
       </div>
     </div>
   );

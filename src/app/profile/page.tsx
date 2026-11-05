@@ -28,7 +28,7 @@ export default function ProfilePage() {
     if (!email) return;
 
     fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/my-books/${encodeURIComponent(email)}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/books?email=${encodeURIComponent(email)}`,
     )
       .then((res) => res.json())
       .then((data: IBook[]) => {
