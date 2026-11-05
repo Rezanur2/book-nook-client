@@ -9,8 +9,6 @@ import { useSession } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
 import { useEffect, useState } from "react";
 import { IBook } from "@/types/book.type";
-import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import { buttonVariants } from "@/components/ui/button";
 
 const MyBooksPage = () => {
 
@@ -39,29 +37,6 @@ const MyBooksPage = () => {
       </div>
     );
   }
-  
-  if (!session) {
-    return (
-      <div className="p-6 md:p-10">
-        <Empty className="border bg-card">
-          <EmptyHeader>
-            <EmptyTitle className="text-lg">
-              You&apos;re not signed in
-            </EmptyTitle>
-            <EmptyDescription>
-              Sign in to see the books you&apos;ve listed;
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Link href="login" className={buttonVariants()}>
-              Sign In
-            </Link>
-          </EmptyContent>
-        </Empty>
-      </div>
-    )
-  }
-
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
@@ -70,22 +45,23 @@ const MyBooksPage = () => {
         <Breadcrumb items={[{ label: "My Books" }]} />
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E0D6] pb-6">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-[#762F3D] tracking-tight">
+        <div className="flex items-center justify-between gap-3 border-b border-[#E6E0D6] pb-5 sm:pb-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
               My Books
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
+            <p className="text-xs sm:text-sm text-gray-600 mt-1 line-clamp-1 sm:line-clamp-none leading-relaxed">
               Manage and update the books you have added.
             </p>
           </div>
 
           <Link
             href="/add-book"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#762F3D] hover:bg-[#5e2530] text-white text-xs font-bold shadow-xs transition-all cursor-pointer w-fit"
+            className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-[#762F3D] hover:bg-[#5e2530] text-white text-xs sm:text-sm font-semibold shadow-xs hover:shadow-sm transition-all cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>Add New Book</span>
+            <span className="hidden sm:inline">Add New Book</span>
+            <span className="inline sm:hidden">Add Book</span>
           </Link>
         </div>
 

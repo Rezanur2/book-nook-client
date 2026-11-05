@@ -71,12 +71,12 @@ const AddBookPage = () => {
         <Breadcrumb items={[{ label: "Add Book" }]} />
 
         {/* Header */}
-        <div className="border-b border-[#E6E0D6] pb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
+        <div className="border-b border-[#E6E0D6] pb-5 sm:pb-6">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
             Add a New Book
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Contribute a physical volume to the BookNook library collection.
+          <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+            Contribute a volume to the BookNook library collection.
           </p>
         </div>
 

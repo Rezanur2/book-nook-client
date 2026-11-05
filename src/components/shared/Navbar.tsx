@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "@/assets/booknook.png";
 import Link from "next/link";
@@ -36,12 +36,25 @@ const Navbar = () => {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const isGoogleAuth = sessionStorage.getItem("booknook_google_auth");
+    if (isGoogleAuth && user) {
+      sessionStorage.removeItem("booknook_google_auth");
+      toast.add({
+        title: "Welcome to BookNook!",
+        description: `Successfully signed in as ${user.name || "reader"}.`,
+        type: "success",
+      });
+    }
+  }, [user]);
+
   const handleSignOut = async () => {
     setPopoverOpen(false);
     await authClient.signOut();
     toast.add({
       title: "Signed Out",
       description: "You have successfully signed out.",
+      type: "info",
     });
     router.push("/");
   };
@@ -244,13 +257,13 @@ const Navbar = () => {
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="w-9 h-9 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#FAF8F3] text-[#762F3D] shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none"
+                className="w-9 h-9 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#762F3D] hover:text-white hover:border-[#762F3D] text-[#762F3D] shadow-2xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none"
                 aria-label="Toggle navigation menu"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5" />
+                  <X className="w-4.5 h-4.5" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-4.5 h-4.5" />
                 )}
               </button>
 

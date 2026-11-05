@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Mail, Lock, User, Image as ImageIcon, CheckCircle2, Circle } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
@@ -13,13 +14,13 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
 import { toast } from "@/components/ui/toast";
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
@@ -27,7 +28,47 @@ export function SignUpForm({
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
 
-  const handleEmailSignUp = async(e: React.SubmitEvent<HTMLElement>) => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const errorParam = params.get("error");
+    const wasPending = sessionStorage.getItem("booknook_google_auth");
+
+    if (errorParam === "cancelled" || errorParam === "access_denied" || wasPending) {
+      sessionStorage.removeItem("booknook_google_auth");
+      if (errorParam) {
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+      toast.add({
+        title: "Sign Up Cancelled",
+        description: "Google sign-up was cancelled or interrupted.",
+        type: "warning",
+      });
+    }
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      sessionStorage.setItem("booknook_google_auth", "true");
+      toast.add({
+        title: "Connecting to Google...",
+        description: "Redirecting to Google authentication.",
+        type: "loading",
+      });
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+        errorCallbackURL: "/signup?error=cancelled",
+      });
+    } catch {
+      sessionStorage.removeItem("booknook_google_auth");
+      toast.add({
+        title: "Google Sign-Up Error",
+        description: "Unable to connect to Google. Please try again.",
+        type: "error",
+      });
+    }
+  };
+  const handleEmailSignUp = async (e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
     setPasswordError("");
 
@@ -50,20 +91,26 @@ export function SignUpForm({
       return;
     }
 
-    const formData = new FormData(e.target)
-    const user = Object.fromEntries(formData.entries()) as {name:string, photoURL:string, email:string, password:string}
+    const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries()) as {
+      name: string;
+      photoURL: string;
+      email: string;
+      password: string;
+    };
 
     const { data, error } = await authClient.signUp.email({
       name: user.name,
       email: user.email,
       password: user.password,
       image: user.photoURL,
-    })
+    });
 
     if (error) {
       toast.add({
         title: "Registration Failed!",
         description: error.message,
+        type: "error",
       });
       return;
     }
@@ -72,9 +119,10 @@ export function SignUpForm({
       toast.add({
         title: "Account Created Successfully!",
         description: "Welcome to BookNook. Please login to continue.",
+        type: "success",
       });
 
-      redirect("/login");
+      router.push("/login");
     }
   };
 
@@ -95,6 +143,7 @@ export function SignUpForm({
         {/* Social Sign Up Button */}
         <Field>
           <Button
+            onClick={handleGoogleSignIn}
             variant="outline"
             type="button"
             className="w-full h-11 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#F5F2EA] text-gray-700 font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-xs"

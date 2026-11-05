@@ -26,27 +26,23 @@ const AllBooksPage = async () => {
     : [];
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen bg-[#FAF8F3] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto space-y-6">
         {/* Breadcrumb */}
         <Breadcrumb items={[{ label: "All Books" }]} />
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E6E0D6] pb-6">
-          <div className="space-y-2 sm:w-[70%] max-lg:w-[70%] max-w-2xl">
-            <p className="text-xs font-semibold tracking-widest uppercase text-[#B76E59]">
-              THE MAIN READING ROOMS &bull; Archival Ledger 2025
-            </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-playfair text-[#762F3D] tracking-tight">
-              Explore the Collection.
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E0D6] pb-5 sm:pb-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
+              All Books
             </h1>
-            <p className="text-sm sm:text-base text-gray-600">
-              Find your next favorite read from our growing library of physical
-              editions and tactile bindings.
+            <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+              Explore our complete library collection of available editions and volumes.
             </p>
           </div>
 
           {/* Total Books Badge */}
-          <div className="flex sm:justify-end">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#762F3D]/10 text-[#762F3D] border border-[#762F3D]/20">
+          <div className="flex items-center sm:justify-end shrink-0">
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#762F3D]/10 text-[#762F3D] border border-[#762F3D]/20 shadow-2xs">
               <BookOpen className="w-3.5 h-3.5" />
               <span>{bookList.length} Total Books</span>
             </span>

@@ -16,13 +16,15 @@ const MyBorrowsPage = () => {
         <Breadcrumb items={[{ label: "My Borrows" }]} />
 
         {/* Header */}
-        <div className="border-b border-[#E6E0D6] pb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-[#762F3D] tracking-tight">
-            My Borrowed Books
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1">
-            Track and manage all the books you have currently borrowed.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6E0D6] pb-5 sm:pb-6">
+          <div className="min-w-0">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
+              My Borrowed Books
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+              Track and manage all the books you have currently borrowed from the library.
+            </p>
+          </div>
         </div>
 
         {/* Empty State Component */}

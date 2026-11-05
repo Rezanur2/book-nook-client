@@ -1,6 +1,8 @@
-"use client"
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Mail, Lock } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
@@ -13,45 +15,94 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const router = useRouter();
 
-    const handleEmailLogIn = async(e: React.SubmitEvent<HTMLElement>) => {
-      e.preventDefault();
-      const formData = new FormData(e.target)
-      const user = Object.fromEntries(formData.entries()) as {email:string, password:string}
-  
-      const { data, error } = await authClient.signIn.email({
-        email: user.email,
-        password: user.password,
-      })
-  
-      if (error) {
-        toast.add({
-          title: "Login Failed!",
-          description: error.message,
-        });
-        return;
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const errorParam = params.get("error");
+    const wasPending = sessionStorage.getItem("booknook_google_auth");
+
+    if (errorParam === "cancelled" || errorParam === "access_denied" || wasPending) {
+      sessionStorage.removeItem("booknook_google_auth");
+      if (errorParam) {
+        window.history.replaceState({}, "", window.location.pathname);
       }
-  
-      if (data) {
-        toast.add({
-          title: "Welcome Back!",
-          description: "You have successfully logged in.", 
-        });
-  
-        redirect("/");
-      }
+      toast.add({
+        title: "Sign In Cancelled",
+        description: "Google sign-in was cancelled or interrupted.",
+        type: "warning",
+      });
+    }
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      sessionStorage.setItem("booknook_google_auth", "true");
+      toast.add({
+        title: "Connecting to Google...",
+        description: "Redirecting to Google sign-in.",
+        type: "loading",
+      });
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/",
+        errorCallbackURL: "/login?error=cancelled",
+      });
+    } catch {
+      sessionStorage.removeItem("booknook_google_auth");
+      toast.add({
+        title: "Sign In Failed",
+        description: "Unable to connect to Google. Please try again.",
+        type: "error",
+      });
+    }
+  };
+
+  const handleEmailLogIn = async (e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
     };
-  
+
+    const { data, error } = await authClient.signIn.email({
+      email: user.email,
+      password: user.password,
+    });
+
+    if (error) {
+      toast.add({
+        title: "Login Failed!",
+        description: error.message,
+        type: "error",
+      });
+      return;
+    }
+
+    if (data) {
+      toast.add({
+        title: "Welcome Back!",
+        description: "You have successfully logged in.",
+        type: "success",
+      });
+
+      router.push("/");
+    }
+  };
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleEmailLogIn}>
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+      onSubmit={handleEmailLogIn}
+    >
       <FieldGroup>
-        {/* Title Header */}
         <div className="flex flex-col items-center gap-1.5 text-center mb-1">
           <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
             Login to your account
@@ -61,9 +112,11 @@ export function LoginForm({
           </p>
         </div>
 
-        {/* Email Field */}
         <Field>
-          <FieldLabel htmlFor="email" className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+          <FieldLabel
+            htmlFor="email"
+            className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+          >
             Email Address
           </FieldLabel>
           <div className="relative mt-0.5">
@@ -79,10 +132,12 @@ export function LoginForm({
           </div>
         </Field>
 
-        {/* Password Field */}
         <Field>
           <div className="flex items-center justify-between">
-            <FieldLabel htmlFor="password" className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+            <FieldLabel
+              htmlFor="password"
+              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+            >
               Password
             </FieldLabel>
             <a
@@ -105,7 +160,6 @@ export function LoginForm({
           </div>
         </Field>
 
-        {/* Submit Button */}
         <Field className="pt-1">
           <Button
             type="submit"
@@ -116,7 +170,6 @@ export function LoginForm({
           </Button>
         </Field>
 
-        {/* Divider */}
         <div className="relative flex items-center justify-center my-1.5">
           <div className="grow border-t border-[#E6E0D6]" />
           <span className="shrink-0 px-3 text-[11px] font-bold tracking-wider uppercase text-gray-400">
@@ -125,9 +178,9 @@ export function LoginForm({
           <div className="grow border-t border-[#E6E0D6]" />
         </div>
 
-        {/* Social Login Button */}
         <Field>
           <Button
+            onClick={handleGoogleSignIn}
             variant="outline"
             type="button"
             className="w-full h-11 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#F5F2EA] text-gray-700 font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-xs"
@@ -153,7 +206,6 @@ export function LoginForm({
             <span>Continue with Google</span>
           </Button>
 
-          {/* Register Link */}
           <FieldDescription className="text-center text-xs text-gray-600 pt-3">
             Don&apos;t have an account?{" "}
             <Link
