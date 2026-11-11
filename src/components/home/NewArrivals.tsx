@@ -8,15 +8,16 @@ const NewArrivals = async () => {
   let books: IBook[] = [];
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/books?limit=6`,
+      {
+        cache: "no-store",
+      },
+    );
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data)) {
-        books = [...data]
-          .sort((a: IBook, b: IBook) => b._id.localeCompare(a._id))
-          .slice(0, 6);
+        books = data;
       }
     }
   } catch (error) {

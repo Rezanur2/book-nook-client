@@ -22,7 +22,7 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
     <ToastPrimitive.Viewport
       data-slot="toast-viewport"
       className={cn(
-        "pointer-events-none fixed top-4 right-0 bottom-auto left-0 z-50 mx-auto w-auto max-w-sm px-4 outline-none sm:w-full",
+        "pointer-events-none fixed top-4 right-0 bottom-auto left-0 z-100 mx-auto w-auto max-w-sm px-4 outline-none sm:w-full",
         className
       )}
       {...props}
@@ -30,13 +30,26 @@ function ToastViewport({ className, ...props }: ToastPrimitive.Viewport.Props) {
   )
 }
 
-function Toast({ className, ...props }: ToastPrimitive.Root.Props) {
+const toastTypeVariants: Record<string, string> = {
+  success: "border-emerald-200/90 bg-[#F4FAF6]/98 text-emerald-950 shadow-emerald-950/5",
+  error: "border-rose-200/90 bg-[#FDF3F3]/98 text-rose-950 shadow-rose-950/5",
+  warning: "border-amber-200/90 bg-[#FFFBF0]/98 text-amber-950 shadow-amber-950/5",
+  info: "border-[#E6E0D6] bg-[#FCFBF8]/98 text-[#292521] shadow-stone-900/10",
+  loading: "border-[#762F3D]/25 bg-[#FAF8F3]/98 text-[#292521] shadow-stone-900/10",
+}
+
+function Toast({
+  className,
+  type,
+  ...props
+}: ToastPrimitive.Root.Props & { type?: string }) {
   return (
     <ToastPrimitive.Root
       data-slot="toast"
       swipeDirection="up"
       className={cn(
-        "group/toast pointer-events-auto absolute top-0 right-0 left-0 z-[calc(1000-var(--toast-index))] mx-auto w-full origin-top rounded-2xl border border-[#E6E0D6] bg-[#FCFBF8]/95 backdrop-blur-md text-[#292521] shadow-xl shadow-stone-900/10 will-change-transform outline-none select-none",
+        "group/toast pointer-events-auto absolute top-0 right-0 left-0 z-[calc(1000-var(--toast-index))] mx-auto w-full origin-top rounded-2xl border backdrop-blur-md shadow-xl will-change-transform outline-none select-none",
+        toastTypeVariants[type || ""] || "border-[#E6E0D6] bg-[#FCFBF8]/98 text-[#292521] shadow-stone-900/10",
         "[--gap:0.75rem] [--height:var(--toast-frontmost-height,var(--toast-height))] [--offset-y:calc(var(--toast-offset-y)+(var(--toast-index)*var(--gap))+var(--toast-swipe-movement-y))] [--peek:0.75rem] [--scale:calc(max(0,1-(var(--toast-index)*0.1)))] [--shrink:calc(1-var(--scale))]",
         "h-(--height) transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)+(var(--toast-index)*var(--peek))+(var(--shrink)*var(--height))))_scale(var(--scale))] [transition:transform_500ms_cubic-bezier(0.22,1,0.36,1),opacity_500ms,height_150ms]",
         "after:absolute after:bottom-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-['']",
@@ -75,7 +88,7 @@ function ToastTitle({ className, ...props }: ToastPrimitive.Title.Props) {
   return (
     <ToastPrimitive.Title
       data-slot="toast-title"
-      className={cn("text-sm font-bold font-playfair text-[#292521] leading-tight", className)}
+      className={cn("text-sm font-bold font-playfair leading-tight text-inherit", className)}
       {...props}
     />
   )
@@ -88,7 +101,7 @@ function ToastDescription({
   return (
     <ToastPrimitive.Description
       data-slot="toast-description"
-      className={cn("text-xs text-gray-600 leading-relaxed", className)}
+      className={cn("text-xs opacity-80 leading-relaxed text-inherit", className)}
       {...props}
     />
   )
@@ -196,7 +209,7 @@ function ToastList() {
   const { toasts } = ToastPrimitive.useToastManager()
 
   return toasts.map((toastItem) => (
-    <Toast key={toastItem.id} toast={toastItem}>
+    <Toast key={toastItem.id} toast={toastItem} type={toastItem.type}>
       <ToastContent>
         <ToastIcon type={toastItem.type} />
         <div className="flex min-w-0 flex-1 flex-col gap-1">

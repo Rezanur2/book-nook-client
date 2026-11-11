@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/shared/Breadcrumb";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { IBook } from "@/types/book.type";
 import { toast } from "@/components/ui/toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -61,6 +61,10 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
   const borrowedCopies = Math.max(0, totalCopies - availableCopies);
   const isAvailable = availableCopies > 0;
 
+  // Format creation date
+  const formattedAddedDate = book.createdAt
+    ? new Date(book.createdAt).toLocaleDateString("en-US", { dateStyle: "medium" })
+    : null;
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
@@ -83,7 +87,7 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
                   book.image ||
                   "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop"
                 }
-                alt={book.title}
+                alt={book.title || "Book cover"}
                 fill
                 priority
                 sizes="(max-width: 768px) 260px, 300px"
@@ -156,7 +160,7 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
               </div>
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
-                  Available
+                  Copies Left
                 </span>
                 <span
                   className={`text-xl font-bold font-playfair ${
@@ -180,30 +184,44 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
             </div>
 
             {/* Added by Section */}
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
-              <Avatar className="w-8 h-8 sm:w-9 sm:h-9">
-                <AvatarImage
-                  referrerPolicy="no-referrer"
-                  src={(book?.creatorImage) as string}
-                  alt={book?.creatorName || "User"}
-                />
-                <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
-                  {book?.creatorName?.charAt(0) || "😎" || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
-                  Added by
-                </span>
-                <span className="text-xs font-bold text-gray-800 block truncate">
-                  {book.creatorName || "Librarian"}
-                </span>
-                {book.creatorEmail && (
-                  <span className="text-[11px] text-gray-500 block truncate">
-                    {book.creatorEmail}
+            <div className="flex items-center justify-between gap-3 p-3 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar className="w-8 h-8 sm:w-9 sm:h-9 shrink-0">
+                  <AvatarImage
+                    referrerPolicy="no-referrer"
+                    src={(book?.creatorImage) as string}
+                    alt={book?.creatorName || "User"}
+                  />
+                  <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
+                    {book?.creatorName?.charAt(0) || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="min-w-0">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                    Added by
                   </span>
-                )}
+                  <span className="text-xs font-bold text-gray-800 block truncate">
+                    {book.creatorName || "Librarian"}
+                  </span>
+                  {book.creatorEmail && (
+                    <span className="text-[11px] text-gray-500 block truncate">
+                      {book.creatorEmail}
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {formattedAddedDate && (
+                <div className="text-right shrink-0 pl-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                    Added on
+                  </span>
+                  <span className="text-xs font-semibold text-gray-700 flex items-center gap-1.5 justify-end mt-0.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#B76E59]" />
+                    {formattedAddedDate}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Borrow This Book Modal & Back to Catalog */}

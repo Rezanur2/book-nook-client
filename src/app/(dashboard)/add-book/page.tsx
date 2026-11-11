@@ -30,8 +30,11 @@ const AddBookPage = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const formValues = Object.fromEntries(formData.entries());
+    const totalCopies = parseInt(formValues.totalCopies as string) || 1;
     const book = {
       ...formValues,
+      totalCopies,
+      availableCopies: totalCopies,
       creatorName: user?.name,
       creatorEmail: user?.email,
       createdAt: new Date().toISOString(),
@@ -65,24 +68,23 @@ const AddBookPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F3] py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto space-y-6">
-        {/* Breadcrumb */}
-        <Breadcrumb items={[{ label: "Add Book" }]} />
+    <div className="space-y-6">
+      {/* Breadcrumb */}
+      <Breadcrumb items={[{ label: "Add Book" }]} />
 
-        {/* Header */}
-        <div className="border-b border-[#E6E0D6] pb-5 sm:pb-6">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
-            Add a New Book
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
-            Contribute a volume to the BookNook library collection.
-          </p>
-        </div>
+      {/* Header */}
+      <div className="border-b border-[#E6E0D6] pb-5 sm:pb-6">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
+          Add a New Book
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
+          Contribute a volume to the BookNook library collection.
+        </p>
+      </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Form Card */}
+      <div className="bg-white rounded-2xl border border-border p-6 sm:p-8 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label
                 htmlFor="title"
@@ -231,7 +233,7 @@ const AddBookPage = () => {
             <div className="pt-3 flex justify-end">
               <Button
                 type="submit"
-                className="bg-primary hover:bg-primary/90 text-white text-sm font-medium px-7 py-2.5 rounded-lg flex items-center space-x-2 w-full sm:w-auto h-11"
+                className="bg-[#762F3D] hover:bg-[#5e2530] text-white text-sm font-semibold px-7 py-2.5 rounded-xl flex items-center justify-center gap-2 w-full sm:w-auto h-11 transition-all cursor-pointer shadow-xs active:scale-95"
               >
                 <BookPlus className="w-4 h-4" />
                 <span>Add Book</span>
@@ -241,7 +243,6 @@ const AddBookPage = () => {
           </form>
         </div>
       </div>
-    </div>
   );
 };
 

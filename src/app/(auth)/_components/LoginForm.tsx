@@ -23,51 +23,28 @@ export function LoginForm({
   const router = useRouter();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const errorParam = params.get("error");
-    const wasPending = sessionStorage.getItem("booknook_google_auth");
-
-    if (errorParam === "cancelled" || errorParam === "access_denied" || wasPending) {
-      sessionStorage.removeItem("booknook_google_auth");
-      if (errorParam) {
-        window.history.replaceState({}, "", window.location.pathname);
-      }
-      toast.add({
-        title: "Sign In Cancelled",
-        description: "Google sign-in was cancelled or interrupted.",
-        type: "warning",
-      });
-    }
+    sessionStorage.removeItem("booknook_google_auth");
   }, []);
 
   const handleGoogleSignIn = async () => {
-    try {
-      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-      const callbackUrl = params?.get("callbackUrl") || "/";
+    sessionStorage.setItem("booknook_google_auth", "true");
+    toast.add({
+      title: "Connecting to Google...",
+      description: "Redirecting to Google sign-in.",
+      type: "loading",
+    });
 
-      sessionStorage.setItem("booknook_google_auth", "true");
-      toast.add({
-        title: "Connecting to Google...",
-        description: "Redirecting to Google sign-in.",
-        type: "loading",
-      });
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: callbackUrl,
-        errorCallbackURL: "/login?error=cancelled",
-      });
-    } catch {
-      sessionStorage.removeItem("booknook_google_auth");
-      toast.add({
-        title: "Sign In Failed",
-        description: "Unable to connect to Google. Please try again.",
-        type: "error",
-      });
-    }
+    const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
+
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: callbackUrl,
+    });
   };
 
   const handleEmailLogIn = async (e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
+    sessionStorage.removeItem("booknook_google_auth");
     const formData = new FormData(e.target);
     const user = Object.fromEntries(formData.entries()) as {
       email: string;
@@ -95,44 +72,43 @@ export function LoginForm({
         type: "success",
       });
 
-      const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-      const callbackUrl = params?.get("callbackUrl") || "/";
+      const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
       router.push(callbackUrl);
     }
   };
 
   return (
     <form
-      className={cn("flex flex-col gap-6", className)}
+      className={cn("flex flex-col gap-5", className)}
       {...props}
       onSubmit={handleEmailLogIn}
     >
       <FieldGroup>
-        <div className="flex flex-col items-center gap-1.5 text-center mb-1">
-          <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
-            Login to your account
+        <div className="flex flex-col items-center gap-2 text-center mb-1">
+          <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold font-playfair text-[#762F3D] tracking-tight leading-snug">
+            Welcome Back, Reader
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-xs">
-            Enter your email below to access your BookNook sanctuary
+          <p className="text-xs sm:text-sm text-[#6E645A] leading-relaxed max-w-sm">
+            Enter your credentials to return to your sanctuary of stories.
           </p>
         </div>
 
         <Field>
           <FieldLabel
             htmlFor="email"
-            className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+            className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
           >
             Email Address
           </FieldLabel>
           <div className="relative mt-0.5">
-            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
             <Input
               id="email"
               name="email"
               type="email"
               placeholder="reader@booknook.com"
               required
-              className="pl-10 h-11 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+              className="pl-10 h-11 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
             />
           </div>
         </Field>
@@ -141,26 +117,26 @@ export function LoginForm({
           <div className="flex items-center justify-between">
             <FieldLabel
               htmlFor="password"
-              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+              className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
             >
               Password
             </FieldLabel>
             <a
               href="#"
-              className="text-xs font-semibold text-[#B76E59] hover:text-[#762F3D] hover:underline transition-colors"
+              className="text-xs font-semibold text-[#8C5E50] hover:text-[#762F3D] hover:underline transition-colors"
             >
-              Forgot your password?
+              Forgot password?
             </a>
           </div>
           <div className="relative mt-0.5">
-            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
             <Input
               id="password"
               name="password"
               type="password"
               placeholder="••••••••"
               required
-              className="pl-10 h-11 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+              className="pl-10 h-11 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
             />
           </div>
         </Field>
@@ -168,16 +144,16 @@ export function LoginForm({
         <Field className="pt-1">
           <Button
             type="submit"
-            className="w-full h-11 rounded-xl bg-[#762F3D] hover:bg-[#5e2530] text-white font-bold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-11 rounded-xl bg-[#762F3D] hover:bg-[#5E222D] text-white font-bold text-sm tracking-wide shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Sign In to BookNook</span>
+            <span>Login to Account</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
         </Field>
 
-        <div className="relative flex items-center justify-center my-1.5">
+        <div className="relative flex items-center justify-center my-1">
           <div className="grow border-t border-[#E6E0D6]" />
-          <span className="shrink-0 px-3 text-[11px] font-bold tracking-wider uppercase text-gray-400">
+          <span className="shrink-0 px-3 text-[10px] font-bold tracking-[0.15em] uppercase text-[#9E9486]">
             Or continue with
           </span>
           <div className="grow border-t border-[#E6E0D6]" />
@@ -188,7 +164,7 @@ export function LoginForm({
             onClick={handleGoogleSignIn}
             variant="outline"
             type="button"
-            className="w-full h-11 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#F5F2EA] text-gray-700 font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-xs"
+            className="w-full h-11 rounded-xl border border-[#E2DDD3] bg-white hover:bg-[#F7F5F0] text-[#4A423B] font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-2xs hover:border-[#C8BFB2]"
           >
             <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -211,13 +187,13 @@ export function LoginForm({
             <span>Continue with Google</span>
           </Button>
 
-          <FieldDescription className="text-center text-xs text-gray-600 pt-3">
+          <FieldDescription className="text-center text-xs text-[#6E645A] pt-3">
             Don&apos;t have an account?{" "}
             <Link
-              href="/signup"
-              className="font-bold text-[#762F3D] hover:underline"
+              href="/register"
+              className="font-bold text-[#762F3D] hover:text-[#5E222D] hover:underline transition-colors"
             >
-              Sign up
+              Register for free
             </Link>
           </FieldDescription>
         </Field>

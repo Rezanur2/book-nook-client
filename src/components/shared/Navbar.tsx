@@ -15,8 +15,6 @@ import {
 import { toast } from "@/components/ui/toast";
 import {
   BookOpen,
-  Bookmark,
-  ChevronRight,
   Clock,
   Home,
   Library,
@@ -30,7 +28,7 @@ import {
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
   const [popoverOpen, setPopoverOpen] = useState(false);
@@ -59,10 +57,6 @@ const Navbar = () => {
     router.push("/");
   };
 
-  if (pathname === "/login" || pathname === "/signup") {
-    return null;
-  }
-
   const desktopLinkStyles = (path: string) => {
     const isActive = pathname === path;
     return `relative px-3.5 py-1.5 text-sm font-semibold tracking-wide rounded-lg transition-all duration-200 ease-out inline-flex items-center justify-center ${
@@ -86,21 +80,30 @@ const Navbar = () => {
   };
 
   const loginButtonStyles =
-    "whitespace-nowrap px-3.5 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-[#762F3D] border border-[#762F3D]/30 rounded-lg bg-transparent hover:bg-[#762F3D] hover:text-white hover:border-[#762F3D] shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 cursor-pointer";
+    "whitespace-nowrap px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-[#762F3D] border border-[#762F3D]/30 rounded-lg bg-transparent hover:bg-[#762F3D] hover:text-white hover:border-[#762F3D] shadow-xs hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 cursor-pointer";
 
   const signupButtonStyles =
-    "whitespace-nowrap px-3.5 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-white border border-[#762F3D] rounded-lg bg-[#762F3D] hover:bg-[#5e2530] hover:border-[#5e2530] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer";
+    "whitespace-nowrap px-2.5 sm:px-4 py-1.5 text-xs sm:text-sm font-semibold text-white border border-[#762F3D] rounded-lg bg-[#762F3D] hover:bg-[#5e2530] hover:border-[#5e2530] shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer";
+
+  const isPrivateRoute =
+    pathname.startsWith("/my-") ||
+    pathname === "/add-book" ||
+    pathname === "/profile";
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
     { href: "/books", label: "All Books", icon: Library },
-    { href: "/add-book", label: "Add Book", icon: PlusCircle },
-    { href: "/my-books", label: "My Books", icon: BookOpen },
-    { href: "/my-borrows", label: "My Borrows", icon: Clock },
+    ...(user || (isPending && isPrivateRoute)
+      ? [
+          { href: "/add-book", label: "Add Book", icon: PlusCircle },
+          { href: "/my-books", label: "My Books", icon: BookOpen },
+          { href: "/my-borrows", label: "My Borrows", icon: Clock },
+        ]
+      : []),
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#F5F3EE]/95 backdrop-blur-md border-b border-[#E6E0D6] shadow-xs transition-all">
+    <header className="sticky top-0 z-50 w-full bg-[#F5F3EE]/95 backdrop-blur-md border-b border-[#E6E0D6] shadow-xs">
       <div className="text-[#5C554E] px-3 py-2.5 sm:py-3.5">
         <nav className="container mx-auto flex items-center justify-between w-full">
           <div className="flex items-center shrink-0">
@@ -138,117 +141,92 @@ const Navbar = () => {
             </ul>
           </div>
 
-          <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
-            {user ? (
-              <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                <PopoverTrigger
-                  render={
-                    <button
-                      type="button"
-                      className="cursor-pointer rounded-full p-0.5 hover:ring-2 hover:ring-[#762F3D]/25 transition-all outline-none"
-                      aria-label="User profile"
-                    >
-                      <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-[#E6E0D6] shadow-2xs">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {isPending ? (
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#E6E0D6]/60 animate-pulse border border-[#E6E0D6] shrink-0" />
+            ) : user ? (
+              <div className="relative inline-flex items-center shrink-0">
+                <Popover
+                  open={popoverOpen}
+                  onOpenChange={setPopoverOpen}
+                  modal={false}
+                >
+                  <PopoverTrigger
+                    render={
+                      <button
+                        type="button"
+                        className="cursor-pointer rounded-full p-0.5 hover:ring-2 hover:ring-[#762F3D]/25 outline-none shrink-0"
+                        aria-label="User profile"
+                      >
+                        <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-[#E6E0D6] shadow-2xs shrink-0">
+                          <AvatarImage
+                            referrerPolicy="no-referrer"
+                            src={user?.image as string}
+                            alt={user?.name || "User"}
+                          />
+                          <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
+                            {user?.name?.charAt(0) || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                      </button>
+                    }
+                  />
+                  <PopoverContent
+                    align="end"
+                    sideOffset={8}
+                    className="w-56 p-2 bg-white border border-[#E6E0D6] rounded-2xl shadow-xl shadow-stone-900/10 z-50 text-[#292521] space-y-1 outline-none ring-0 focus:outline-none"
+                  >
+                    {/* User Info Header */}
+                    <div className="flex items-center gap-2.5 p-2 rounded-xl bg-[#FAF8F3]">
+                      <Avatar className="w-9 h-9 border border-[#E6E0D6] shrink-0">
                         <AvatarImage
                           referrerPolicy="no-referrer"
-                          src={(user?.image) as string}
+                          src={user?.image as string}
                           alt={user?.name || "User"}
                         />
                         <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
                           {user?.name?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
-                    </button>
-                  }
-                />
-                <PopoverContent
-                  align="end"
-                  sideOffset={8}
-                  className="w-64 p-0 bg-white border border-[#E6E0D6] rounded-2xl shadow-xl shadow-stone-900/10 overflow-hidden z-50 text-[#292521] space-y-0 outline-none ring-0 focus:outline-none"
-                >
-                  <div className="p-3.5 bg-linear-to-b from-[#FAF8F3] to-white border-b border-[#E6E0D6] flex items-center gap-3">
-                    <Avatar className="w-10 h-10 border border-[#E6E0D6] shadow-2xs shrink-0">
-                      <AvatarImage
-                        referrerPolicy="no-referrer"
-                        src={(user?.image) as string}
-                        alt={user?.name || "User"}
-                      />
-                      <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">
-                        {user?.name?.charAt(0) || "U"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-1">
-                        <p className="font-bold text-sm text-gray-900 truncate font-playfair">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold text-xs text-[#292521] truncate font-playfair">
                           {user?.name || "User"}
                         </p>
-                        <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#762F3D]/10 text-[#762F3D] border border-[#762F3D]/20 shrink-0">
-                          Member
-                        </span>
+                        <p className="text-[10px] text-gray-500 truncate mt-0.5">
+                          {user?.email}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-gray-500 truncate mt-0.5">
-                        {user?.email}
-                      </p>
                     </div>
-                  </div>
 
-                  <div className="p-1.5 space-y-0.5">
+                    {/* My Profile Link */}
                     <Link
                       href="/profile"
                       onClick={() => setPopoverOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-700 hover:text-[#762F3D] hover:bg-[#FAF8F3] rounded-xl transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-gray-700 hover:text-[#762F3D] hover:bg-[#FAF8F3] rounded-xl transition-colors"
                     >
-                      <div className="flex items-center gap-2.5">
-                        <User className="w-4 h-4 text-gray-500 group-hover:text-[#762F3D]" />
-                        <span>My Profile</span>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#762F3D] transition-transform group-hover:translate-x-0.5" />
+                      <User className="w-4 h-4 text-[#762F3D]" />
+                      <span>My Profile</span>
                     </Link>
 
-                    <Link
-                      href="/my-books"
-                      onClick={() => setPopoverOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-700 hover:text-[#762F3D] hover:bg-[#FAF8F3] rounded-xl transition-colors group"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <BookOpen className="w-4 h-4 text-gray-500 group-hover:text-[#762F3D]" />
-                        <span>My Listed Books</span>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#762F3D] transition-transform group-hover:translate-x-0.5" />
-                    </Link>
-
-                    <Link
-                      href="/my-borrows"
-                      onClick={() => setPopoverOpen(false)}
-                      className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-gray-700 hover:text-[#762F3D] hover:bg-[#FAF8F3] rounded-xl transition-colors group"
-                    >
-                      <div className="flex items-center gap-2.5">
-                        <Bookmark className="w-4 h-4 text-gray-500 group-hover:text-[#762F3D]" />
-                        <span>My Borrows</span>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#762F3D] transition-transform group-hover:translate-x-0.5" />
-                    </Link>
-                  </div>
-
-                  <div className="p-2 border-t border-[#E6E0D6] bg-[#FAF8F3]/40">
+                    {/* Sign Out Button */}
                     <button
                       type="button"
                       onClick={handleSignOut}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-rose-600 hover:text-white bg-rose-50/70 hover:bg-rose-600 border border-rose-200/80 hover:border-rose-600 rounded-xl transition-all cursor-pointer shadow-2xs"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                     >
-                      <LogOut className="w-3.5 h-3.5" />
+                      <LogOut className="w-4 h-4" />
                       <span>Sign Out</span>
                     </button>
-                  </div>
-                </PopoverContent>
-              </Popover>
+                  </PopoverContent>
+                </Popover>
+              </div>
             ) : (
               <>
                 <Link href="/login" className={loginButtonStyles}>
                   Login
                 </Link>
-                <Link href="/signup" className={signupButtonStyles}>
-                  Sign Up
+                <Link href="/register" className={signupButtonStyles}>
+                  Register
                 </Link>
               </>
             )}
@@ -297,6 +275,25 @@ const Navbar = () => {
                         </li>
                       );
                     })}
+
+                    {!user && (
+                      <li className="pt-2 mt-1 border-t border-[#F0EDE5] space-y-1.5">
+                        <Link
+                          href="/login"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center justify-center w-full px-3 py-2 text-xs font-semibold text-[#762F3D] border border-[#762F3D]/30 rounded-xl hover:bg-[#762F3D] hover:text-white transition-all duration-200"
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          href="/register"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="flex items-center justify-center w-full px-3 py-2 text-xs font-semibold text-white bg-[#762F3D] hover:bg-[#5e2530] rounded-xl transition-all duration-200"
+                        >
+                          Register
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </>
               )}

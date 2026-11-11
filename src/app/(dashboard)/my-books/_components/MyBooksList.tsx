@@ -22,7 +22,7 @@ function BookCoverImage({ src, title }: { src?: string; title: string }) {
       {!hasError && src ? (
         <Image
           src={src}
-          alt={title}
+          alt={title || "Book cover"}
           fill
           sizes="80px"
           className="object-cover"

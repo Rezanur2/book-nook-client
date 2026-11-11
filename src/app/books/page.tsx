@@ -12,18 +12,13 @@ export const metadata: Metadata = {
   description: "Explore our collection of available books in the library.",
 };
 
-
 const AllBooksPage = async () => {
   const books = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {
     cache: "no-store",
   });
   const booksData = await books.json();
 
-  const bookList: IBook[] = Array.isArray(booksData)
-    ? [...booksData].sort((a: IBook, b: IBook) =>
-        b._id.localeCompare(a._id),
-      )
-    : [];
+  const bookList: IBook[] = Array.isArray(booksData) ? booksData : [];
 
   return (
     <div className="min-h-screen bg-[#FAF8F3] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
@@ -36,7 +31,8 @@ const AllBooksPage = async () => {
               All Books
             </h1>
             <p className="text-xs sm:text-sm text-gray-600 mt-1 max-w-2xl leading-relaxed">
-              Explore our complete library collection of available editions and volumes.
+              Explore our complete library collection of available editions and
+              volumes.
             </p>
           </div>
 
@@ -53,7 +49,9 @@ const AllBooksPage = async () => {
         {bookList.length === 0 ? (
           <div className="text-center py-16 px-4 bg-white rounded-2xl border border-[#E6E0D6] space-y-3">
             <BookOpen className="w-10 h-10 text-gray-400 mx-auto" />
-            <h3 className="text-lg font-semibold font-playfair text-[#292521]">No Books Found</h3>
+            <h3 className="text-lg font-semibold font-playfair text-[#292521]">
+              No Books Found
+            </h3>
             <p className="text-sm text-gray-500 max-w-sm mx-auto">
               Our shelves are currently empty. Be the first to catalog a book!
             </p>

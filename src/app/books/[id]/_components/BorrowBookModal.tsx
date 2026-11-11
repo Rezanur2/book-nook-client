@@ -34,6 +34,13 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
       : totalCopies;
   const isAvailable = availableCopies > 0;
 
+  // Lending period calculation (Max 7 days from today)
+  const today = new Date();
+  const maxDateObj = new Date(today);
+  maxDateObj.setDate(today.getDate() + 7);
+  const minDate = today.toLocaleDateString("en-CA");
+  const maxDate = maxDateObj.toLocaleDateString("en-CA");
+
   if (!isAvailable) {
     return (
       <button
@@ -81,12 +88,11 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
       });
 
       const data = await res.json();
-      console.log("Borrow response:", data);
 
       if (res.ok) {
         toast.add({
-          title: "Book Borrowed Successfully",
-          description: `You have borrowed "${book.title}". View it in My Borrows.`,
+          title: "Book Borrowed Successfully!",
+          description: `Enjoy reading "${book.title}"!`,
           type: "success",
         });
         setOpen(false);
@@ -100,12 +106,10 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
       }
     } catch {
       toast.add({
-        title: "Book Borrowed",
-        description: `You borrowed "${book.title}".`,
-        type: "success",
+        title: "Failed to Borrow",
+        description: "Something went wrong. Please try again.",
+        type: "error",
       });
-      setOpen(false);
-      router.refresh();
     } finally {
       setLoading(false);
     }
@@ -120,10 +124,10 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
       </DialogTrigger>
 
       {/* 2. Modal Form Inputs */}
-      <DialogContent className="bg-white p-6 rounded-2xl max-w-md border border-[#E6E0D6] shadow-xl">
+      <DialogContent className="bg-white p-6 rounded-2xl max-w-xs sm:max-w-sm md:max-w-md border border-[#E6E0D6] shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold font-playfair text-[#762F3D]">
-            Borrow Book
+          <DialogTitle className="text-xl font-bold font-sans text-[#762F3D]">
+            Borrow ( {book.title} )
           </DialogTitle>
           <DialogDescription className="text-xs text-gray-500">
             Fill in the information below to borrow this book.
@@ -169,20 +173,30 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
 
           {/* Return Date */}
           <div className="space-y-1">
-            <label
-              htmlFor="returnDate"
-              className="text-xs font-semibold text-gray-700"
-            >
-              Return Date <span className="text-red-500">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="returnDate"
+                className="text-xs font-semibold text-gray-700"
+              >
+                Return Date <span className="text-red-500">*</span>
+              </label>
+              <span className="text-[10px] text-[#B76E59] font-medium">
+                Max 7 days
+              </span>
+            </div>
             <input
               id="returnDate"
               name="returnDate"
               type="date"
               required
-              min={new Date().toISOString().split("T")[0]}
+              min={minDate}
+              max={maxDate}
+              defaultValue={maxDate}
               className="w-full h-10 px-3 bg-white border border-[#E6E0D6] rounded-xl text-xs text-gray-800 cursor-pointer outline-none focus:border-[#762F3D]"
             />
+            <p className="text-[11px] text-gray-500">
+              * Lending period is maximum 7 days from today.
+            </p>
           </div>
 
           {/* Hidden inputs to pass book props */}

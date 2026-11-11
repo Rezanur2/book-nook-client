@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { Spinner } from "@/components/ui/spinner";
-import { User, BookOpen, Library, Save, Sparkles } from "lucide-react";
+import { User, BookOpen, BookmarkCheck, Save, Sparkles } from "lucide-react";
 import { IBook } from "@/types/book.type";
 
 export default function ProfilePage() {
@@ -21,6 +21,7 @@ export default function ProfilePage() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [contributedCount, setContributedCount] = useState<number>(0);
+  const [borrowCount, setBorrowCount] = useState<number>(0);
 
   const email = user?.email;
 
@@ -38,6 +39,19 @@ export default function ProfilePage() {
       })
       .catch((err) => {
         console.error("Error fetching contributed books:", err);
+      });
+
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows?email=${encodeURIComponent(email)}`,
+    )
+      .then((res) => res.json())
+      .then((data: unknown[]) => {
+        if (Array.isArray(data)) {
+          setBorrowCount(data.length);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching borrowed books:", err);
       });
   }, [email]);
 
@@ -130,8 +144,12 @@ export default function ProfilePage() {
 
             {/* Stats Pills */}
             <div className="flex items-center gap-2.5 shrink-0 pt-2 sm:pt-0">
-              <Link href="/my-books" className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
-                <BookOpen className="w-3.5 h-3.5 text-[#762F3D]" />
+              <Link
+                href="/my-books"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FAF8F3] hover:bg-[#F3EFE6] border border-[#E6E0D6] transition-all group"
+                title="View My Books"
+              >
+                <BookOpen className="w-3.5 h-3.5 text-[#762F3D] transition-transform group-hover:scale-110" />
                 <div className="text-left leading-none">
                   <span className="text-xs font-bold text-gray-900 block">
                     {contributedCount}
@@ -142,17 +160,21 @@ export default function ProfilePage() {
                 </div>
               </Link>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
-                <Library className="w-3.5 h-3.5 text-[#762F3D]" />
+              <Link
+                href="/my-borrows"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#FAF8F3] hover:bg-[#F3EFE6] border border-[#E6E0D6] transition-all group"
+                title="View My Borrows"
+              >
+                <BookmarkCheck className="w-3.5 h-3.5 text-[#762F3D] transition-transform group-hover:scale-110" />
                 <div className="text-left leading-none">
                   <span className="text-xs font-bold text-gray-900 block">
-                    0
+                    {borrowCount}
                   </span>
                   <span className="text-[9px] text-gray-500 uppercase font-semibold">
                     Borrows
                   </span>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

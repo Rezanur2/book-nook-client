@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "@/components/ui/toast";
 
-export function SignUpForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
@@ -24,52 +24,30 @@ export function SignUpForm({
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
+  useEffect(() => {
+    sessionStorage.removeItem("booknook_google_auth");
+  }, []);
+
   const hasMinLength = password.length >= 6;
   const hasUppercase = /[A-Z]/.test(password);
   const hasLowercase = /[a-z]/.test(password);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const errorParam = params.get("error");
-    const wasPending = sessionStorage.getItem("booknook_google_auth");
-
-    if (errorParam === "cancelled" || errorParam === "access_denied" || wasPending) {
-      sessionStorage.removeItem("booknook_google_auth");
-      if (errorParam) {
-        window.history.replaceState({}, "", window.location.pathname);
-      }
-      toast.add({
-        title: "Sign Up Cancelled",
-        description: "Google sign-up was cancelled or interrupted.",
-        type: "warning",
-      });
-    }
-  }, []);
-
   const handleGoogleSignIn = async () => {
-    try {
-      sessionStorage.setItem("booknook_google_auth", "true");
-      toast.add({
-        title: "Connecting to Google...",
-        description: "Redirecting to Google authentication.",
-        type: "loading",
-      });
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/",
-        errorCallbackURL: "/signup?error=cancelled",
-      });
-    } catch {
-      sessionStorage.removeItem("booknook_google_auth");
-      toast.add({
-        title: "Google Sign-Up Error",
-        description: "Unable to connect to Google. Please try again.",
-        type: "error",
-      });
-    }
+    sessionStorage.setItem("booknook_google_auth", "true");
+    toast.add({
+      title: "Connecting to Google...",
+      description: "Redirecting to Google sign-in.",
+      type: "loading",
+    });
+
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
   };
   const handleEmailSignUp = async (e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
+    sessionStorage.removeItem("booknook_google_auth");
     setPasswordError("");
 
     //  Password Validation
@@ -127,16 +105,15 @@ export function SignUpForm({
   };
 
   return (
-    <form className={cn("flex flex-col gap-5", className)} {...props} onSubmit={handleEmailSignUp}>
+    <form className={cn("flex flex-col gap-4 sm:gap-5", className)} {...props} onSubmit={handleEmailSignUp}>
       <FieldGroup>
         {/* Title Header */}
-        <div className="flex flex-col items-center gap-1.5 text-center mb-1">
-          <h1 className="text-3xl sm:text-4xl font-bold font-playfair text-[#762F3D] tracking-tight">
-            Become Part of the Story.
+        <div className="flex flex-col items-center gap-2 text-center mb-1">
+          <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold font-playfair text-[#762F3D] tracking-tight leading-snug">
+            Become Part of the Story
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 leading-relaxed max-w-sm">
-            Sign up for your reader account to borrow books, reserve editions, and
-            share your reading journey.
+          <p className="text-xs sm:text-sm text-[#6E645A] leading-relaxed max-w-sm">
+            Create your reader account to discover, share, and borrow timeless volumes.
           </p>
         </div>
 
@@ -146,7 +123,7 @@ export function SignUpForm({
             onClick={handleGoogleSignIn}
             variant="outline"
             type="button"
-            className="w-full h-11 rounded-xl border border-[#E6E0D6] bg-white hover:bg-[#F5F2EA] text-gray-700 font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-xs"
+            className="w-full h-11 rounded-xl border border-[#E2DDD3] bg-white hover:bg-[#F7F5F0] text-[#4A423B] font-semibold text-sm gap-2.5 transition-all cursor-pointer shadow-2xs hover:border-[#C8BFB2]"
           >
             <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
               <path
@@ -173,8 +150,8 @@ export function SignUpForm({
         {/* Divider */}
         <div className="relative flex items-center justify-center my-0.5">
           <div className="grow border-t border-[#E6E0D6]" />
-          <span className="shrink-0 px-3 text-[11px] font-bold tracking-wider uppercase text-gray-400">
-            Or sign up with email
+          <span className="shrink-0 px-3 text-[10px] font-bold tracking-[0.15em] uppercase text-[#9E9486]">
+            Or register with email
           </span>
           <div className="grow border-t border-[#E6E0D6]" />
         </div>
@@ -185,19 +162,19 @@ export function SignUpForm({
           <Field>
             <FieldLabel
               htmlFor="name"
-              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+              className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
             >
               Full Name
             </FieldLabel>
             <div className="relative mt-0.5">
-              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
               <Input
                 id="name"
                 name="name"
                 type="text"
                 placeholder="Eleanor Vance"
                 required
-                className="pl-10 h-10 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+                className="pl-10 h-10 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
               />
             </div>
           </Field>
@@ -206,19 +183,19 @@ export function SignUpForm({
           <Field>
             <FieldLabel
               htmlFor="email"
-              className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+              className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
             >
               Email Address
             </FieldLabel>
             <div className="relative mt-0.5">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
               <Input
                 id="email"
                 name="email"
                 type="email"
                 placeholder="reader@booknook.com"
                 required
-                className="pl-10 h-10 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+                className="pl-10 h-10 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
               />
             </div>
           </Field>
@@ -228,19 +205,19 @@ export function SignUpForm({
         <Field>
           <FieldLabel
             htmlFor="photoURL"
-            className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+            className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
           >
             Photo URL
           </FieldLabel>
           <div className="relative mt-0.5">
-            <ImageIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <ImageIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
             <Input
               id="photoURL"
               name="photoURL"
               type="url"
-              placeholder="https://images.unsplash.com/photo-..."
+              placeholder="https://i.ibb.co/..."
               required
-              className="pl-10 h-10 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+              className="pl-10 h-10 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
             />
           </div>
         </Field>
@@ -249,12 +226,12 @@ export function SignUpForm({
         <Field>
           <FieldLabel
             htmlFor="password"
-            className="text-xs font-bold text-gray-700 uppercase tracking-wider"
+            className="text-[11px] font-bold text-[#4A423B] uppercase tracking-[0.12em]"
           >
             Password
           </FieldLabel>
           <div className="relative mt-0.5">
-            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9E9486] pointer-events-none" />
             <Input
               id="password"
               name="password"
@@ -266,55 +243,55 @@ export function SignUpForm({
               }}
               placeholder="••••••••"
               required
-              className="pl-10 h-10 rounded-xl border-[#E6E0D6] bg-white text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-xs"
+              className="pl-10 h-10 rounded-xl border-[#E2DDD3] bg-white text-[#292521] placeholder:text-[#A89F91] text-sm focus-visible:ring-2 focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D] shadow-2xs hover:border-[#C8BFB2] transition-colors"
             />
           </div>
         </Field>
 
         {/* Password Validation */}
-        <div className="p-3 rounded-xl bg-white/70 border border-[#E6E0D6] space-y-1.5 text-xs">
-          <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400 block">
-            Password Criteria
+        <div className="p-3 rounded-xl bg-[#F5F2EB]/70 border border-[#E6E0D6] space-y-1.5 text-xs">
+          <span className="text-[10px] font-bold tracking-[0.12em] uppercase text-[#8C5E50] block">
+            Password Requirements
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div
               className={cn(
-                "flex items-center gap-1.5 whitespace-nowrap transition-colors",
-                hasMinLength ? "text-emerald-700 font-semibold" : "text-gray-500"
+                "flex items-center gap-1.5 whitespace-nowrap transition-colors text-[11px]",
+                hasMinLength ? "text-emerald-700 font-semibold" : "text-[#8C8377]"
               )}
             >
               {hasMinLength ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               ) : (
-                <Circle className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                <Circle className="w-3.5 h-3.5 text-[#C4BCB0] shrink-0" />
               )}
               <span>Min 6 characters</span>
             </div>
 
             <div
               className={cn(
-                "flex items-center gap-1.5 whitespace-nowrap transition-colors",
-                hasUppercase ? "text-emerald-700 font-semibold" : "text-gray-500"
+                "flex items-center gap-1.5 whitespace-nowrap transition-colors text-[11px]",
+                hasUppercase ? "text-emerald-700 font-semibold" : "text-[#8C8377]"
               )}
             >
               {hasUppercase ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               ) : (
-                <Circle className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                <Circle className="w-3.5 h-3.5 text-[#C4BCB0] shrink-0" />
               )}
               <span>One uppercase</span>
             </div>
 
             <div
               className={cn(
-                "flex items-center gap-1.5 whitespace-nowrap transition-colors",
-                hasLowercase ? "text-emerald-700 font-semibold" : "text-gray-500"
+                "flex items-center gap-1.5 whitespace-nowrap transition-colors text-[11px]",
+                hasLowercase ? "text-emerald-700 font-semibold" : "text-[#8C8377]"
               )}
             >
               {hasLowercase ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
               ) : (
-                <Circle className="w-3.5 h-3.5 text-gray-300 shrink-0" />
+                <Circle className="w-3.5 h-3.5 text-[#C4BCB0] shrink-0" />
               )}
               <span>One lowercase</span>
             </div>
@@ -329,41 +306,24 @@ export function SignUpForm({
           </p>
         )}
 
-        {/* Terms Checkbox */}
-        <div className="flex items-center gap-2.5 pt-1">
-          <input
-            id="terms"
-            name="terms"
-            type="checkbox"
-            required
-            className="w-4 h-4 rounded border-[#E6E0D6] text-[#762F3D] accent-[#762F3D] focus:ring-[#762F3D]/20 cursor-pointer shrink-0"
-          />
-          <label
-            htmlFor="terms"
-            className="text-xs text-gray-600 select-none cursor-pointer leading-none"
-          >
-            I agree to the BookNook Terms of Service and Reader Guidelines.
-          </label>
-        </div>
-
         {/* Submit Button */}
         <Field className="pt-1">
           <Button
             type="submit"
-            className="w-full h-11 rounded-xl bg-[#762F3D] hover:bg-[#5e2530] text-white font-bold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full h-11 rounded-xl bg-[#762F3D] hover:bg-[#5E222D] text-white font-bold text-sm tracking-wide shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Create Reader Account</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
 
           {/* Sign In Link */}
-          <FieldDescription className="text-center text-xs text-gray-600 pt-2.5">
+          <FieldDescription className="text-center text-xs text-[#6E645A] pt-2.5">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-bold text-[#762F3D] hover:underline"
+              className="font-bold text-[#762F3D] hover:text-[#5E222D] hover:underline transition-colors"
             >
-              Sign in
+              Login to account
             </Link>
           </FieldDescription>
         </Field>
