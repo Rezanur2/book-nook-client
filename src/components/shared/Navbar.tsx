@@ -88,7 +88,8 @@ const Navbar = () => {
   const isPrivateRoute =
     pathname.startsWith("/my-") ||
     pathname === "/add-book" ||
-    pathname === "/profile";
+    pathname === "/profile" ||
+    (pathname.startsWith("/books/") && pathname !== "/books");
 
   const navLinks = [
     { href: "/", label: "Home", icon: Home },
