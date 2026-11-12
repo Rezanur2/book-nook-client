@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import ScrollToTop from "@/components/shared/ScrollToTop";
 import { Toaster } from "@/components/ui/toast";
 
 const josefinSans = Josefin_Sans({
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main> 
         <Footer /> 
         <Toaster />
+        <ScrollToTop />
       </body>
     </html>
   );

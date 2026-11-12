@@ -4,48 +4,41 @@ import {
   Compass,
   Sparkles,
   Bookmark,
-  Palette,
   Layers,
 } from "lucide-react";
 import CategoryCard from "./CategoryCard";
 
 const categories = [
   {
-    title: "Fiction & Classics",
-    description: "Timeless literature, historical prose, and unforgettable storytelling from master authors.",
+    title: "Fiction & Novels",
+    description: "Immersive storytelling, classic narratives, and award-winning literature from master authors.",
     icon: BookOpen,
+    href: "/books?category=Fiction",
   },
   {
-    title: "History & Archives",
-    description: "Ancient chronicles, medieval folios, and profound documentary records of humanity.",
-    icon: Compass,
-  },
-  {
-    title: "Science & Cosmos",
-    description: "Astronomical journeys, quantum wonders, and insightful inquiries into natural laws.",
+    title: "Science & Nature",
+    description: "Fascinating breakthroughs, cosmic phenomena, and analytical explorations of the universe.",
     icon: Sparkles,
+    href: "/books?category=Science",
   },
   {
-    title: "Philosophy & Ethics",
-    description: "Foundational meditations, moral discourse, and timeless philosophical wisdom.",
+    title: "History & Heritage",
+    description: "Documented chronicles of ancient eras, cultural movements, and pivotal global history.",
+    icon: Compass,
+    href: "/books?category=History",
+  },
+  {
+    title: "Kids & Young Minds",
+    description: "Engaging picture books, inspiring moral tales, and fun adventures tailored for young readers.",
     icon: Bookmark,
-  },
-  {
-    title: "Art & Poetry",
-    description: "Illustrated collections, poetic anthologies, and aesthetics of the written craft.",
-    icon: Palette,
-  },
-  {
-    title: "Memories & Biographies",
-    description: "Intimate life journeys, extraordinary memoirs, and letters of historic figures.",
-    icon: Layers,
+    href: "/books?category=Kids",
   },
 ];
 
 const TopCategories = () => {
   return (
     <section className="w-full bg-white py-16 sm:py-20 border-b border-[#E6E0D6]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
           <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-[#B76E59] uppercase mb-2 sm:mb-3">
@@ -60,14 +53,15 @@ const TopCategories = () => {
           </p>
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* 4 Categories Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
           {categories.map((cat) => (
             <CategoryCard
               key={cat.title}
               title={cat.title}
               description={cat.description}
               icon={cat.icon}
+              href={cat.href}
             />
           ))}
         </div>
