@@ -19,14 +19,24 @@ const BookCard = ({ book }: { book: IBook }) => {
     <div className="bg-white rounded-2xl border border-[#E6E0D6] p-3.5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full group">
       {/* 1. Top Section: Image & Badges */}
       <div>
-        <div className="relative w-full aspect-4/4 rounded-xl overflow-hidden bg-[#FAF8F3]">
-          {/* Cover Photo */}
+        <div className="relative w-full h-56 sm:h-60 rounded-xl overflow-hidden bg-[#FAF8F3]">
+          {/* Ambient blurred backdrop to eliminate empty side gaps */}
+          <Image
+            src={book.image}
+            alt=""
+            fill
+            aria-hidden="true"
+            sizes="33vw"
+            className="object-cover blur-xl scale-125 opacity-40 pointer-events-none"
+          />
+
+          {/* Sharp Foreground Book Cover */}
           <Image
             src={book.image}
             alt={book.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="relative object-contain p-2 drop-shadow-md group-hover:scale-105 transition-transform duration-500"
           />
 
           {/* Top-Left Category Badge */}
@@ -54,9 +64,9 @@ const BookCard = ({ book }: { book: IBook }) => {
 
           {/* Bottom Gradient Overlay on Image: Added Date */}
           {addedDate && (
-            <div className="absolute inset-x-0 bottom-0 h-14 bg-linear-to-t from-black/80 via-black/40 to-transparent flex items-end px-3 pb-2 text-[11px] text-white/90">
-              <div className="flex items-center space-x-1.5 text-[11px] text-white/90 font-medium">
-                <Calendar className="w-3.5 h-3.5 text-amber-200 shrink-0" />
+            <div className="absolute inset-x-0 bottom-0 h-10 bg-linear-to-t from-black/60 via-black/20 to-transparent flex items-end px-3 pb-1.5 text-[11px] text-white/90">
+              <div className="flex items-center space-x-1.5 text-[10px] text-white/90 font-medium">
+                <Calendar className="w-3 h-3 text-amber-200 shrink-0" />
                 <span>Added: {addedDate}</span>
               </div>
             </div>
@@ -64,19 +74,19 @@ const BookCard = ({ book }: { book: IBook }) => {
         </div>
 
         {/* 2. Middle Section: Author, Stock, Title, Description */}
-        <div className="mt-3.5 space-y-1.5">
+        <div className="mt-3 space-y-1">
           <div className="flex items-center justify-between gap-2">
             <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#B76E59] truncate">
               {book.author}
             </p>
-            <span className="text-sm font-medium text-gray-500 shrink-0">
+            <span className="text-xs font-medium text-gray-500 shrink-0">
               <strong className="text-gray-800">
                 {copies} {copies === 1 ? "Copy" : "Copies"}
               </strong>
             </span>
           </div>
           <h3
-            className="font-playfair text-xl font-bold text-[#292521] leading-tight line-clamp-1 group-hover:text-primary transition-colors"
+            className="font-playfair text-lg font-bold text-[#292521] leading-snug line-clamp-1 group-hover:text-primary transition-colors"
             title={book.title}
           >
             {book.title}
@@ -89,7 +99,7 @@ const BookCard = ({ book }: { book: IBook }) => {
       </div>
 
       {/* 3. Bottom Row: Full-Width View Details Button */}
-      <div className="mt-4">
+      <div className="mt-3.5">
         <Link
           href={`/books/${book._id}`}
           className="w-full inline-flex items-center justify-center space-x-2 bg-[#762F3D] hover:bg-[#5e2530] text-white text-xs font-semibold py-2.5 rounded-xl shadow-xs transition-all duration-200 group-hover:shadow-md"

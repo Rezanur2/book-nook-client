@@ -85,21 +85,34 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
         />
 
         {/* Main Details Card */}
-        <div className="bg-white rounded-2xl border border-[#E6E0D6] p-5 sm:p-8 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+        <div className="bg-linear-to-b from-[#FDFBF7] via-[#F9F5EC] to-[#F4EEE3] rounded-3xl border border-[#DFD6C7] p-6 sm:p-9 shadow-2xl shadow-amber-950/8 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* 1. Book Cover Image */}
           <div className="md:col-span-4 flex justify-center w-full">
-            <div className="relative w-full max-w-55 sm:max-w-65 md:max-w-full aspect-3/4 rounded-2xl overflow-hidden bg-[#FAF8F3] border border-[#E6E0D6] shadow-md shadow-amber-950/5">
-              <Image
-                src={
-                  book.image ||
-                  "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop"
-                }
-                alt={book.title || "Book cover"}
-                fill
-                priority
-                sizes="(max-width: 768px) 260px, 300px"
-                className="object-cover"
-              />
+            <div className="relative w-full max-w-60 sm:max-w-65 md:max-w-full aspect-3/4 rounded-2xl overflow-hidden bg-white/70 border border-[#E3DBD0] shadow-xl shadow-stone-900/10 flex items-center justify-center p-3">
+              {/* Soft Ambient Glow from book cover */}
+              {book.image && (
+                <Image
+                  src={book.image}
+                  alt=""
+                  fill
+                  aria-hidden="true"
+                  className="object-cover blur-2xl scale-125 opacity-35 pointer-events-none"
+                />
+              )}
+              {/* Sharp 3D Book Cover */}
+              <div className="relative w-full h-full">
+                <Image
+                  src={
+                    book.image ||
+                    "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=800&auto=format&fit=crop"
+                  }
+                  alt={book.title || "Book cover"}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 260px, 300px"
+                  className="object-contain drop-shadow-2xl transition-transform duration-300 hover:scale-[1.03]"
+                />
+              </div>
             </div>
           </div>
 
