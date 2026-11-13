@@ -16,6 +16,7 @@ import { toast } from "@/components/ui/toast";
 import { IBook } from "@/types/book.type";
 import { Trash2, Loader2, AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 interface DeleteBooksDialogProps {
   book: IBook;
@@ -29,11 +30,15 @@ const DeleteBooksDialog = ({ book, onBookDeleted }: DeleteBooksDialogProps) => {
 
   const handleDeleteBook = async () => {
     setIsDeleting(true);
+    const token = await getTokenFromClient();
     try {
       const result = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/books/${book._id}`,
         {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         }
       );
 

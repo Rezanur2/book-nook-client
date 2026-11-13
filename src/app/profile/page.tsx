@@ -12,6 +12,7 @@ import Breadcrumb from "@/components/shared/Breadcrumb";
 import { Spinner } from "@/components/ui/spinner";
 import { User, BookOpen, BookmarkCheck, Save, Sparkles } from "lucide-react";
 import { IBook } from "@/types/book.type";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 export default function ProfilePage() {
   const { data: session, isPending } = useSession();
@@ -41,18 +42,25 @@ export default function ProfilePage() {
         console.error("Error fetching contributed books:", err);
       });
 
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows?email=${encodeURIComponent(email)}`,
-    )
-      .then((res) => res.json())
-      .then((data: unknown[]) => {
-        if (Array.isArray(data)) {
-          setBorrowCount(data.length);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching borrowed books:", err);
-      });
+    getTokenFromClient().then((token) => {
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows?email=${encodeURIComponent(email)}`,
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        },
+      )
+        .then((res) => res.json())
+        .then((data: unknown[]) => {
+          if (Array.isArray(data)) {
+            setBorrowCount(data.length);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching borrowed books:", err);
+        });
+    });
   }, [email]);
 
   if (isPending) {

@@ -216,7 +216,7 @@ const Navbar = () => {
                       className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span>Sign Out</span>
+                      <span>Logout</span>
                     </button>
                   </PopoverContent>
                 </Popover>

@@ -15,6 +15,7 @@ import { BookOpen } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { IBook } from "@/types/book.type";
 import { toast } from "@/components/ui/toast";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 interface BorrowBookModalProps {
   book: IBook;
@@ -78,11 +79,13 @@ export default function BorrowBookModal({ book }: BorrowBookModalProps) {
       borrowDate: new Date().toISOString(),
     };
 
+    const token = await getTokenFromClient();
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/borrows`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(borrowData),
       });

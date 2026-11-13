@@ -9,6 +9,7 @@ import { IBook } from "@/types/book.type";
 import { toast } from "@/components/ui/toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BorrowBookModal from "./_components/BorrowBookModal";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 interface BookDetailsProps {
   params: Promise<{ id: string }>;
@@ -16,10 +17,14 @@ interface BookDetailsProps {
 
 const getBook = cache(async (id: string): Promise<IBook | null> => {
   try {
+    const token = await getTokenFromServer();
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/books/${id}`,
       {
         cache: "no-store",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       },
     );
     if (!res.ok) return null;
@@ -63,7 +68,9 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
 
   // Format creation date
   const formattedAddedDate = book.createdAt
-    ? new Date(book.createdAt).toLocaleDateString("en-US", { dateStyle: "medium" })
+    ? new Date(book.createdAt).toLocaleDateString("en-US", {
+        dateStyle: "medium",
+      })
     : null;
 
   return (
@@ -189,7 +196,7 @@ const BookDetailsPage = async ({ params }: BookDetailsProps) => {
                 <Avatar className="w-8 h-8 sm:w-9 sm:h-9 shrink-0">
                   <AvatarImage
                     referrerPolicy="no-referrer"
-                    src={(book?.creatorImage) as string}
+                    src={book?.creatorImage as string}
                     alt={book?.creatorName || "User"}
                   />
                   <AvatarFallback className="bg-[#762F3D] text-white text-xs font-bold">

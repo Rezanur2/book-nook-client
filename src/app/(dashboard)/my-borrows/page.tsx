@@ -8,6 +8,7 @@ import Breadcrumb from "@/components/shared/Breadcrumb";
 import NoBorrows from "./_components/NoBorrows";
 import MyBorrowsTable from "./_components/MyBorrowsTable";
 import { IBorrow } from "@/types/borrow.type";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 export const metadata: Metadata = {
   title: "BookNook | My Borrows",
@@ -28,11 +29,15 @@ const MyBorrowsPage = async () => {
   const email = session.user.email;
 
   let borrows: IBorrow[] = [];
+  const token = await getTokenFromServer();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows?email=${encodeURIComponent(email)}`,
       {
         cache: "no-store",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
       }
     );
 

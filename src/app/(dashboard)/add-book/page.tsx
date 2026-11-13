@@ -11,6 +11,7 @@ import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { Spinner } from "@/components/ui/spinner";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 const AddBookPage = () => {
   const router = useRouter();
@@ -40,11 +41,13 @@ const AddBookPage = () => {
       createdAt: new Date().toISOString(),
       creatorImage: user?.image,
     };
+    const token = await getTokenFromClient()
 
     const result = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/books`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(book),
     });

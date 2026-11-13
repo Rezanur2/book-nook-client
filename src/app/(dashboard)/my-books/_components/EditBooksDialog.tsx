@@ -18,6 +18,7 @@ import { toast } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { IBook } from "@/types/book.type";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 interface EditBooksDialogProps {
   book: IBook;
@@ -48,6 +49,8 @@ const EditBooksDialog = ({ book, onBookUpdated }: EditBooksDialogProps) => {
       description: formValues.description,
     };
 
+    const token = await getTokenFromClient();
+
     try {
       const result = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/books/${book._id}`,
@@ -55,6 +58,7 @@ const EditBooksDialog = ({ book, onBookUpdated }: EditBooksDialogProps) => {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            authorization: `Bearer ${token}`
           },
           body: JSON.stringify(updatedData),
         }

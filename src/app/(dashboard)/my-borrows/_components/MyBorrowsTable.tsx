@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 interface MyBorrowsTableProps {
   borrows: IBorrow[];
@@ -34,11 +35,15 @@ export default function MyBorrowsTable({
   const handleReturn = async (id: string, title: string) => {
     setReturningId(id);
 
+    const token = await getTokenFromClient()
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/borrows/${id}`,
         {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
         },
       );
 
