@@ -5,6 +5,8 @@ import HowBorrowingWorks from "@/components/home/HowBorrowingWorks";
 import TopCategories from "@/components/home/TopCategories";
 import JoinCommunity from "@/components/home/JoinCommunity";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "BookNook | Home",
   description:
