@@ -59,7 +59,7 @@ const Footer = () => {
     <footer className="border-t border-border bg-[#F5F3EE] text-[#5C554E] pt-12 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main 4-Column Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10 border-b border-border">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-y-8 gap-x-8 sm:gap-x-14 lg:gap-x-10 pb-10 border-b border-border">
           {/* Column 1: Brand Logo, Tagline, Description & Social Links */}
           <div className="lg:col-span-4 space-y-3 text-center sm:text-left">
             {/* Logo Image & Logo Text */}
@@ -83,7 +83,7 @@ const Footer = () => {
               </Link>
             </div>
 
-            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-sm mx-auto sm:mx-0">
+            <p className="text-xs sm:text-sm text-gray-600 leading-relaxed max-w-sm sm:max-w-xs lg:max-w-sm mx-auto sm:mx-0">
               A modern online library and book borrowing platform dedicated to
               reading, sharing books, and exploring timeless stories for readers
               everywhere.

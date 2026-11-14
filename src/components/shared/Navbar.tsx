@@ -35,6 +35,17 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest(".mobile-nav-menu")) {
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
     const isGoogleAuth = sessionStorage.getItem("booknook_google_auth");
     if (isGoogleAuth && user) {
       sessionStorage.removeItem("booknook_google_auth");
@@ -108,19 +119,19 @@ const Navbar = () => {
       <div className="text-[#5C554E] px-3 py-2.5 sm:py-3.5">
         <nav className="container mx-auto flex items-center justify-between w-full">
           <div className="flex items-center shrink-0">
-            <Link href="/" className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
               <Image
                 src={Logo}
                 width={40}
                 height={40}
                 alt="BookNook Logo"
-                className="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0"
+                className="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0"
               />
               <div className="flex flex-col text-left leading-tight">
-                <span className="font-bold text-xl sm:text-2xl font-josefin tracking-tight text-[#292521]">
+                <span className="font-bold text-lg sm:text-2xl font-josefin tracking-tight text-[#292521]">
                   Book<span className="text-[#762F3D]">Nook</span>
                 </span>
-                <span className="text-[8px] sm:text-[9px] font-semibold text-[#8C5E50] tracking-[0.2em] uppercase">
+                <span className="text-[8px] sm:text-[9px] font-semibold text-[#8C5E50] tracking-normal sm:tracking-[0.2em] uppercase">
                   A World Between Pages
                 </span>
               </div>
@@ -232,7 +243,7 @@ const Navbar = () => {
               </>
             )}
 
-            <div className="relative lg:hidden">
+            <div className="relative lg:hidden mobile-nav-menu">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -247,12 +258,7 @@ const Navbar = () => {
               </button>
 
               {mobileMenuOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setMobileMenuOpen(false)}
-                  />
-                  <ul className="absolute right-0 mt-3 w-60 bg-white border border-[#E6E0D6] rounded-2xl shadow-xl shadow-stone-900/10 p-2 z-50 transition-all text-[#292521] space-y-1">
+                <ul className="absolute right-0 mt-3 w-60 bg-white border border-[#E6E0D6] rounded-2xl shadow-xl shadow-stone-900/10 p-2 z-50 transition-all text-[#292521] space-y-1">
                     <li className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[#B76E59] border-b border-[#F0EDE5] mb-1">
                       Menu
                     </li>
@@ -296,7 +302,6 @@ const Navbar = () => {
                       </li>
                     )}
                   </ul>
-                </>
               )}
             </div>
           </div>

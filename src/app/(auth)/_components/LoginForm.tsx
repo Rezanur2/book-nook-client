@@ -20,17 +20,18 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"form">) {
   useEffect(() => {
+    toast.close();
     sessionStorage.removeItem("booknook_google_auth");
   }, []);
 
   const handleGoogleSignIn = async () => {
     sessionStorage.setItem("booknook_google_auth", "true");
-    toast.add({
+    const toastId = toast.add({
       title: "Connecting to Google...",
       description: "Redirecting to Google sign-in.",
       type: "loading",
-      timeout: 4000,
     });
+    setTimeout(() => toast.close(toastId), 3000);
 
     const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
 

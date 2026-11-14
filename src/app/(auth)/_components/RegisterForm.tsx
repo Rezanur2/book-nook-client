@@ -25,6 +25,7 @@ export function RegisterForm({
   const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
+    toast.close();
     sessionStorage.removeItem("booknook_google_auth");
   }, []);
 
@@ -34,12 +35,12 @@ export function RegisterForm({
 
   const handleGoogleSignIn = async () => {
     sessionStorage.setItem("booknook_google_auth", "true");
-    toast.add({
+    const toastId = toast.add({
       title: "Connecting to Google...",
       description: "Redirecting to Google sign-in.",
       type: "loading",
-      timeout: 4000,
     });
+    setTimeout(() => toast.close(toastId), 3000);
 
     await authClient.signIn.social({
       provider: "google",

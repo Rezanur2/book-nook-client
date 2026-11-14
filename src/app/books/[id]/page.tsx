@@ -6,7 +6,6 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { IBook } from "@/types/book.type";
-import { toast } from "@/components/ui/toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import BorrowBookModal from "./_components/BorrowBookModal";
 import { getTokenFromServer } from "@/lib/getTokenFromServer";
@@ -29,11 +28,8 @@ const getBook = cache(async (id: string): Promise<IBook | null> => {
     );
     if (!res.ok) return null;
     return await res.json();
-  } catch {
-    toast.add({
-      title: "Failed to fetch book",
-      type: "error",
-    });
+  } catch (error) {
+    console.error("Failed to fetch book:", error);
     return null;
   }
 });

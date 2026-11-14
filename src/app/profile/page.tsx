@@ -27,6 +27,12 @@ export default function ProfilePage() {
   const email = user?.email;
 
   useEffect(() => {
+    if (!isPending && !user) {
+      router.push("/login?callbackUrl=/profile");
+    }
+  }, [isPending, user, router]);
+
+  useEffect(() => {
     if (!email) return;
 
     fetch(

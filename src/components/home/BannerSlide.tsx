@@ -70,7 +70,6 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
                   src={slide.image}
                   alt={slide.bookTitle}
                   fill
-                  priority
                   sizes="(max-width: 768px) 100vw, 30vw"
                   className="object-cover"
                 />

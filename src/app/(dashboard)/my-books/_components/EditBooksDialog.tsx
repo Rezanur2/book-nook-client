@@ -39,13 +39,17 @@ const EditBooksDialog = ({ book, onBookUpdated }: EditBooksDialogProps) => {
 
     const formData = new FormData(e.currentTarget);
     const formValues = Object.fromEntries(formData.entries());
+    const totalCopies = Number(formValues.totalCopies);
+    const currentlyBorrowed = (book.totalCopies || 1) - (book.availableCopies ?? book.totalCopies ?? 1);
+    const availableCopies = Math.max(0, totalCopies - currentlyBorrowed);
 
     const updatedData = {
       title: formValues.title,
       author: formValues.author,
       category: formValues.category,
       image: formValues.image,
-      totalCopies: Number(formValues.totalCopies),
+      totalCopies,
+      availableCopies,
       description: formValues.description,
     };
 
