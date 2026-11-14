@@ -96,6 +96,8 @@ export function RegisterForm({
     }
 
     if (data) {
+      await authClient.signOut();
+
       toast.add({
         title: "Account Created Successfully!",
         description: "Welcome to BookNook. Please login to continue.",
