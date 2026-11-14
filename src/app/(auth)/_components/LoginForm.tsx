@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, Mail, Lock } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const router = useRouter();
   useEffect(() => {
     toast.close();
     sessionStorage.removeItem("booknook_google_auth");
@@ -72,7 +74,8 @@ export function LoginForm({
       });
 
       const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
-      window.location.href = callbackUrl;
+      router.push(callbackUrl);
+      router.refresh();
     }
   };
 

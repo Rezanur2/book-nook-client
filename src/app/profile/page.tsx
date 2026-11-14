@@ -20,6 +20,7 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [contributedCount, setContributedCount] = useState<number>(0);
   const [borrowCount, setBorrowCount] = useState<number>(0);
@@ -131,12 +132,14 @@ export default function ProfilePage() {
             <div className="flex items-end gap-4 -mt-12 sm:-mt-14">
               {/* Overlapping Avatar */}
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 border-white shadow-md relative overflow-hidden bg-[#FAF8F3] shrink-0">
-                {currentPhoto ? (
+                {currentPhoto && !imageError ? (
                   <Image
                     src={currentPhoto}
                     alt={user?.name || "User"}
                     fill
+                    unoptimized
                     className="object-cover"
+                    onError={() => setImageError(true)}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#762F3D] text-white text-2xl font-bold">
@@ -216,12 +219,14 @@ export default function ProfilePage() {
             {/* Photo Preview and URL Input */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3.5 rounded-xl bg-[#FAF8F3] border border-[#E6E0D6]">
               <div className="w-14 h-14 rounded-xl border border-[#E6E0D6] relative overflow-hidden bg-white shrink-0">
-                {currentPhoto ? (
+                {currentPhoto && !imageError ? (
                   <Image
                     src={currentPhoto}
                     alt="Preview"
                     fill
+                    unoptimized
                     className="object-cover"
+                    onError={() => setImageError(true)}
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[#762F3D] text-white text-sm font-bold">
@@ -241,7 +246,10 @@ export default function ProfilePage() {
                   name="image"
                   type="url"
                   value={currentPhoto}
-                  onChange={(e) => setImageUrl(e.target.value)}
+                  onChange={(e) => {
+                    setImageUrl(e.target.value);
+                    setImageError(false);
+                  }}
                   placeholder="https://images.unsplash.com/photo-..."
                   className="h-10 bg-white border-[#E6E0D6] text-sm rounded-xl focus-visible:ring-[#762F3D]/20 focus-visible:border-[#762F3D]"
                 />
