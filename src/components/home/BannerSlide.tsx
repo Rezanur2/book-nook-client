@@ -46,7 +46,7 @@ const BannerSlide = ({ slide }: { slide: ISlide }) => {
 
       {/* Right: Archival Book Folio Card */}
       <div className="lg:col-span-5 flex justify-center lg:justify-end py-4 px-2 sm:px-6 w-full min-w-0 overflow-hidden">
-        <div className="relative w-full max-w-[270px] sm:max-w-[290px] lg:max-w-80 my-2">
+        <div className="relative w-full max-w-67.5 sm:max-w-72.5 lg:max-w-80 my-2">
           <div className="absolute inset-0 bg-linear-to-tr from-[#B76E59]/20 via-[#C6A46A]/15 to-transparent rounded-3xl blur-xl -z-20 pointer-events-none" />
 
           {/* Layer 1: Back Archival */}

@@ -13,7 +13,7 @@ const Footer = () => {
 
   // Social Media Links
   const socialLinks = (
-    <div className="flex items-center justify-center sm:justify-start space-x-3 pt-2">
+    <div className="flex items-center justify-center sm:justify-start space-x-3">
       {/* GitHub */}
       <a
         href="https://github.com/Rezanur2"
@@ -90,6 +90,9 @@ const Footer = () => {
             </p>
 
             {/* Social Links */}
+            <h4 className="font-semibold text-xs sm:text-sm text-primary uppercase tracking-wider font-josefin pt-2">
+              Social Links
+            </h4>
             {socialLinks}
           </div>
 
@@ -222,6 +225,9 @@ const Footer = () => {
             </p>
 
             <div className="space-y-2.5 pt-1 text-xs sm:text-sm flex flex-col items-center sm:items-start w-full">
+              <h4 className="font-semibold text-xs sm:text-sm text-primary uppercase tracking-wider font-josefin">
+                Contact Us
+              </h4>
               <div className="flex items-center justify-center sm:justify-start space-x-2 text-gray-700 w-full">
                 <Mail className="w-3.5 h-3.5 text-primary shrink-0" />
                 <a
@@ -242,7 +248,7 @@ const Footer = () => {
 
         {/* Bottom Bar: Copyright & Legal */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-gray-500 gap-3 text-center">
-          <p>© 2025 BookNook Library Guild. All rights reserved.</p>
+          <p>© 2026 BookNook Library Guild. All rights reserved.</p>
 
           <div className="flex items-center space-x-5">
             <Link

@@ -127,14 +127,28 @@ export default function MyBorrowsTable({
               </div>
             </div>
 
-            <div className="pt-2.5 border-t border-[#F5F2EA] flex items-center justify-between gap-2">
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
-                  Return Date
-                </span>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#762F3D] bg-[#762F3D]/8 px-2.5 py-1 rounded-lg border border-[#762F3D]/15 whitespace-nowrap">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>{formatDate(borrow.returnDate)}</span>
+            <div className="pt-2.5 border-t border-[#F5F2EA] flex flex-wrap items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                {/* Borrow Date */}
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                    Borrowed
+                  </span>
+                  <div className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-700 bg-gray-100/80 px-2 py-0.5 rounded-md border border-gray-200/60 whitespace-nowrap">
+                    <Calendar className="w-3 h-3 text-[#B76E59]" />
+                    <span>{formatDate(borrow.borrowDate)}</span>
+                  </div>
+                </div>
+
+                {/* Return Date */}
+                <div className="space-y-0.5">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">
+                    Return Date
+                  </span>
+                  <div className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#762F3D] bg-[#762F3D]/8 px-2 py-0.5 rounded-md border border-[#762F3D]/15 whitespace-nowrap">
+                    <Calendar className="w-3 h-3 text-[#762F3D]" />
+                    <span>{formatDate(borrow.returnDate)}</span>
+                  </div>
                 </div>
               </div>
 

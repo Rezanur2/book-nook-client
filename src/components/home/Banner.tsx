@@ -24,7 +24,7 @@ const slides: ISlide[] = [
     lentCount: "Lent out 38 times",
     rating: "4.9",
     image:
-      "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1000&auto=format&fit=crop",
+      "https://i.ibb.co.com/rRYjcKQb/Secret-history-review-1200x600.png",
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const slides: ISlide[] = [
     lentCount: "Lent out 52 times",
     rating: "4.8",
     image:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000&auto=format&fit=crop",
+      "https://i.ibb.co.com/7dYNsvJY/images-9.jpg",
   },
   {
     id: 3,

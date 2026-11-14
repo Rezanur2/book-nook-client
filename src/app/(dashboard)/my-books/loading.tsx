@@ -1,10 +1,14 @@
 import { Spinner } from "@/components/ui/spinner";
+import { BookOpen } from "lucide-react";
 
 export default function Loading() {
   return (
-    <div className="min-h-[70vh] bg-[#FAF8F3] flex flex-col items-center justify-center gap-3">
-      <Spinner className="size-8 text-[#762F3D]" />
-      <span className="text-xs font-semibold text-gray-500 tracking-wide font-josefin">
+    <div className="min-h-[70vh] bg-[#FAF8F3] flex flex-col items-center justify-center gap-3.5">
+      <div className="relative flex items-center justify-center">
+        <Spinner className="size-10 text-[#762F3D]" />
+        <BookOpen className="w-4 h-4 text-[#B76E59] absolute animate-pulse" />
+      </div>
+      <span className="text-xs font-semibold text-gray-500 tracking-widest font-josefin uppercase">
         Loading your collection...
       </span>
     </div>

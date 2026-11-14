@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ArrowRight, Mail, Lock } from "lucide-react";
 import { cn } from "cn";
 import { Button } from "@/components/ui/button";
@@ -20,8 +19,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const router = useRouter();
-
   useEffect(() => {
     sessionStorage.removeItem("booknook_google_auth");
   }, []);
@@ -32,6 +29,7 @@ export function LoginForm({
       title: "Connecting to Google...",
       description: "Redirecting to Google sign-in.",
       type: "loading",
+      timeout: 4000,
     });
 
     const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
@@ -73,7 +71,7 @@ export function LoginForm({
       });
 
       const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
-      router.push(callbackUrl);
+      window.location.href = callbackUrl;
     }
   };
 
@@ -86,10 +84,10 @@ export function LoginForm({
       <FieldGroup>
         <div className="flex flex-col items-center gap-2 text-center mb-1">
           <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold font-playfair text-[#762F3D] tracking-tight leading-snug">
-            Welcome Back, Reader
+            Login to Your Account
           </h1>
           <p className="text-xs sm:text-sm text-[#6E645A] leading-relaxed max-w-sm">
-            Enter your credentials to return to your sanctuary of stories.
+            Welcome back, reader! Enter your credentials to continue your journey.
           </p>
         </div>
 

@@ -38,6 +38,7 @@ export function RegisterForm({
       title: "Connecting to Google...",
       description: "Redirecting to Google sign-in.",
       type: "loading",
+      timeout: 4000,
     });
 
     await authClient.signIn.social({
@@ -110,10 +111,10 @@ export function RegisterForm({
         {/* Title Header */}
         <div className="flex flex-col items-center gap-2 text-center mb-1">
           <h1 className="text-2xl sm:text-3xl lg:text-[32px] font-bold font-playfair text-[#762F3D] tracking-tight leading-snug">
-            Become Part of the Story
+            Register an Account
           </h1>
           <p className="text-xs sm:text-sm text-[#6E645A] leading-relaxed max-w-sm">
-            Create your reader account to discover, share, and borrow timeless volumes.
+            Register as a reader to discover, share, and borrow timeless volumes.
           </p>
         </div>
 
@@ -312,7 +313,7 @@ export function RegisterForm({
             type="submit"
             className="w-full h-11 rounded-xl bg-[#762F3D] hover:bg-[#5E222D] text-white font-bold text-sm tracking-wide shadow-xs hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <span>Create Reader Account</span>
+            <span>Register</span>
             <ArrowRight className="w-4 h-4" />
           </Button>
 

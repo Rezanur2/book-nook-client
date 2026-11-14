@@ -1,5 +1,12 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { BookOpen, Home } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "BookNook | 404 Not Found",
+  description:
+    "The page or manuscript you are searching for does not exist in our library catalog.",
+};
 
 export default function NotFound() {
   return (
@@ -27,7 +34,7 @@ export default function NotFound() {
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#762F3D] hover:bg-[#5e2530] text-white text-xs sm:text-sm font-semibold shadow-sm transition-all"
           >
             <Home className="w-4 h-4" />
-            <span>Return to Home</span>
+            <span>Back to Home</span>
           </Link>
 
           <Link
