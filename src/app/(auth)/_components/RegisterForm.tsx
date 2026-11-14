@@ -13,7 +13,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import { toast } from "@/components/ui/toast";
 
 export function RegisterForm({
@@ -21,6 +21,15 @@ export function RegisterForm({
   ...props
 }: React.ComponentProps<"form">) {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
+  useEffect(() => {
+    if (!isPending && user) {
+      router.push("/");
+    }
+  }, [isPending, user, router]);
+
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
 

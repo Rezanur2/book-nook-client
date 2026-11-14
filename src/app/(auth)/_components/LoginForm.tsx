@@ -14,13 +14,23 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/toast";
-import { authClient } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
+  useEffect(() => {
+    if (!isPending && user) {
+      const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/";
+      router.push(callbackUrl);
+    }
+  }, [isPending, user, router]);
+
   useEffect(() => {
     toast.close();
     sessionStorage.removeItem("booknook_google_auth");
